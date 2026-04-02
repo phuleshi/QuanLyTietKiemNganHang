@@ -1,12 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuanLyTietKiemNganHang.Models
 {
-    internal class SoTietKiem
+    public class SoTietKiem
     {
+        public int Id { get; set; }
+        public string MaSo { get; set; }
+        public int KhachHangId { get; set; }
+        public int NhanVienMoSoId { get; set; }
+        public decimal SoTienGui { get; set; }
+        public decimal LaiSuat { get; set; }
+        public DateTime NgayMoSo { get; set; }
+        public string TrangThai { get; set; }
     }
 }
