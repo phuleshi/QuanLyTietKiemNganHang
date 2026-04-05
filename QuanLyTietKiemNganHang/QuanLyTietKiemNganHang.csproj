@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Configuration" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +74,7 @@
     <Compile Include="Services\NhanVienService.cs" />
     <Compile Include="Services\DashboardService.cs" />
     <Compile Include="Services\MockDatabase.cs" />
+    <Compile Include="Services\Db.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\FrmDangNhap.resx">

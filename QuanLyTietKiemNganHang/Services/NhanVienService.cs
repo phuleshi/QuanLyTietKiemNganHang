@@ -1,59 +1,106 @@
 using QuanLyTietKiemNganHang.Models;
-using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace QuanLyTietKiemNganHang.Services
 {
     public class NhanVienService
     {
-        public List<NhanVien> GetAll() => MockDatabase.NhanViens.OrderBy(x => x.Id).ToList();
+        public List<NhanVien> GetAll()
+        {
+            var table = Db.ExecuteDataTable(
+                @"SELECT ma_nv, tai_khoan, mat_khau, vai_tro
+                  FROM nhan_vien
+                  ORDER BY ma_nv",
+                CommandType.Text);
+
+            return table.AsEnumerable().Select(Map).ToList();
+        }
 
         public List<NhanVien> Search(string keyword)
         {
-            keyword = (keyword ?? string.Empty).Trim().ToLower();
-            return GetAll().Where(x =>
-                x.MaNhanVien.ToLower().Contains(keyword) ||
-                x.HoTen.ToLower().Contains(keyword) ||
-                x.SoDienThoai.ToLower().Contains(keyword) ||
-                x.Email.ToLower().Contains(keyword) ||
-                x.ChucVu.ToLower().Contains(keyword)).ToList();
+            keyword = (keyword ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return GetAll();
+            }
+
+            var table = Db.ExecuteDataTable(
+                @"SELECT ma_nv, tai_khoan, mat_khau, vai_tro
+                  FROM nhan_vien
+                  WHERE ma_nv LIKE @keyword
+                     OR tai_khoan LIKE @keyword
+                     OR vai_tro LIKE @keyword
+                  ORDER BY ma_nv",
+                CommandType.Text,
+                new SqlParameter("@keyword", "%" + keyword + "%"));
+
+            return table.AsEnumerable().Select(Map).ToList();
         }
 
-        public bool IsDuplicateMaNhanVien(string maNhanVien, int excludeId)
+        public bool ExistsMaNhanVien(string maNhanVien)
         {
-            var value = (maNhanVien ?? string.Empty).Trim();
-            return MockDatabase.NhanViens.Any(x =>
-                x.Id != excludeId &&
-                string.Equals(x.MaNhanVien, value, StringComparison.OrdinalIgnoreCase));
+            var result = Db.ExecuteScalar(
+                "SELECT COUNT(*) FROM nhan_vien WHERE ma_nv = @maNv",
+                CommandType.Text,
+                new SqlParameter("@maNv", maNhanVien));
+            return result != null && (int)result > 0;
+        }
+
+        public bool ExistsTaiKhoan(string taiKhoan, string excludeMaNhanVien)
+        {
+            var query = @"SELECT COUNT(*) 
+                          FROM nhan_vien 
+                          WHERE tai_khoan = @taiKhoan
+                            AND (@excludeMaNv = '' OR ma_nv <> @excludeMaNv)";
+            var result = Db.ExecuteScalar(
+                query,
+                CommandType.Text,
+                new SqlParameter("@taiKhoan", taiKhoan),
+                new SqlParameter("@excludeMaNv", excludeMaNhanVien ?? string.Empty));
+            return result != null && (int)result > 0;
         }
 
         public void Add(NhanVien model)
         {
-            model.Id = MockDatabase.NhanViens.Any() ? MockDatabase.NhanViens.Max(x => x.Id) + 1 : 1;
-            if (string.IsNullOrWhiteSpace(model.MatKhau)) model.MatKhau = "123456";
-            MockDatabase.NhanViens.Add(model);
+            Db.ExecuteNonQuery(
+                "sp_them_nhan_vien",
+                CommandType.StoredProcedure,
+                new SqlParameter("@tai_khoan", model.TaiKhoan),
+                new SqlParameter("@mat_khau", model.MatKhau),
+                new SqlParameter("@vai_tro", model.VaiTro));
         }
 
         public void Update(NhanVien model)
         {
-            var current = MockDatabase.NhanViens.FirstOrDefault(x => x.Id == model.Id);
-            if (current == null) return;
-            current.MaNhanVien = model.MaNhanVien;
-            current.HoTen = model.HoTen;
-            current.SoDienThoai = model.SoDienThoai;
-            current.Email = model.Email;
-            current.ChucVu = model.ChucVu;
-            if (!string.IsNullOrWhiteSpace(model.MatKhau)) current.MatKhau = model.MatKhau;
-            current.NgayVaoLam = model.NgayVaoLam;
-            current.LuongCoBan = model.LuongCoBan;
-            current.TrangThai = model.TrangThai;
+            Db.ExecuteNonQuery(
+                "sp_sua_nhan_vien",
+                CommandType.StoredProcedure,
+                new SqlParameter("@ma_nv", model.MaNhanVien),
+                new SqlParameter("@tai_khoan", model.TaiKhoan),
+                new SqlParameter("@mat_khau", model.MatKhau),
+                new SqlParameter("@vai_tro", model.VaiTro));
         }
 
-        public void Delete(int id)
+        public void Delete(string maNhanVien)
         {
-            var current = MockDatabase.NhanViens.FirstOrDefault(x => x.Id == id);
-            if (current != null) MockDatabase.NhanViens.Remove(current);
+            Db.ExecuteNonQuery(
+                "sp_xoa_nhan_vien",
+                CommandType.StoredProcedure,
+                new SqlParameter("@ma_nv", maNhanVien));
+        }
+
+        private static NhanVien Map(DataRow row)
+        {
+            return new NhanVien
+            {
+                MaNhanVien = row["ma_nv"].ToString(),
+                TaiKhoan = row["tai_khoan"].ToString(),
+                MatKhau = row["mat_khau"].ToString(),
+                VaiTro = row["vai_tro"].ToString()
+            };
         }
     }
 }

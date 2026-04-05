@@ -86,21 +86,29 @@ namespace QuanLyTietKiemNganHang.Forms
                 return;
             }
 
-            var user = authService.Login(txtUsername.Text.Trim(), txtPassword.Text.Trim());
-            if (user == null)
+            try
             {
-                lblError.Text = "Sai thông tin đăng nhập.";
-                return;
-            }
+                var user = authService.Login(txtUsername.Text.Trim(), txtPassword.Text.Trim());
+                if (user == null)
+                {
+                    lblError.Text = "Sai thông tin đăng nhập.";
+                    return;
+                }
 
-            Hide();
-            using (var dashboard = new FrmDashboard(user))
-            {
-                dashboard.ShowDialog();
+                Hide();
+                using (var dashboard = new FrmDashboard(user))
+                {
+                    dashboard.ShowDialog();
+                }
+                Show();
+                txtPassword.SelectAll();
+                txtPassword.Focus();
             }
-            Show();
-            txtPassword.SelectAll();
-            txtPassword.Focus();
+            catch (Exception ex)
+            {
+                lblError.Text = "Không thể kết nối CSDL.";
+                MessageBox.Show("Lỗi đăng nhập/CSDL: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

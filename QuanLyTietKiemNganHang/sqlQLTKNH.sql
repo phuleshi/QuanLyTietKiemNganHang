@@ -16,6 +16,7 @@ CREATE TABLE khach_hang (
     dia_chi NVARCHAR(255)
 );
 
+select * from khach_hang
 --------------------------------------------------
 -- 2. Bảng Gói Tiết Kiệm
 --------------------------------------------------
@@ -26,6 +27,8 @@ CREATE TABLE goi_tiet_kiem (
     ky_han_thang INT NOT NULL
 );
 
+select * from goi_tiet_kiem
+
 --------------------------------------------------
 -- 3. Bảng Nhân Viên
 --------------------------------------------------
@@ -35,6 +38,8 @@ CREATE TABLE nhan_vien (
     mat_khau NVARCHAR(255) NOT NULL,
     vai_tro NVARCHAR(20) CHECK (vai_tro IN (N'Admin', N'Giao_dich_vien'))
 );
+
+select * from nhan_vien
 
 --------------------------------------------------
 -- 4. Bảng Sổ Tiết Kiệm
@@ -60,6 +65,7 @@ CREATE TABLE so_tiet_kiem (
     FOREIGN KEY (ma_nv_mo) REFERENCES nhan_vien(ma_nv)
 );
 
+select * from so_tiet_kiem
 --------------------------------------------------
 -- 5. Bảng Giao Dịch
 --------------------------------------------------
@@ -78,6 +84,9 @@ CREATE TABLE giao_dich (
     FOREIGN KEY (ma_nv) REFERENCES nhan_vien(ma_nv)
 );
 
+select * from giao_dich
+
+
 --------------------------------------------------
 -- 6. Bảng Nhật Ký Hệ Thống
 --------------------------------------------------
@@ -95,6 +104,8 @@ CREATE TABLE nhat_ky_he_thong (
 
     FOREIGN KEY (ma_nhan_vien) REFERENCES nhan_vien(ma_nv)
 );
+
+select * from nhat_ky_he_thong
 
 INSERT INTO khach_hang VALUES
 ('KH001', '001234567890', N'Nguyễn Văn An', '0901234567', N'Hà Nội'),
@@ -116,11 +127,11 @@ INSERT INTO nhan_vien VALUES
 ('NV003', 'gdv02', '123456', N'Giao_dich_vien');
 
 INSERT INTO so_tiet_kiem VALUES
-('STK001', 'KH001', 'GT002', 'NV002', 10000000, 10000000, 4.50, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Dang_mo'),
-('STK002', 'KH002', 'GT003', 'NV002', 20000000, 20000000, 5.50, GETDATE(), DATEADD(MONTH, 6, GETDATE()), N'Dang_mo'),
-('STK003', 'KH003', 'GT004', 'NV003', 50000000, 50000000, 6.80, GETDATE(), DATEADD(MONTH, 12, GETDATE()), N'Dang_mo'),
-('STK004', 'KH004', 'GT001', 'NV003', 15000000, 15000000, 0.50, GETDATE(), NULL, N'Dang_mo'),
-('STK005', 'KH005', 'GT005', 'NV002', 30000000, 30000000, 7.20, GETDATE(), DATEADD(MONTH, 24, GETDATE()), N'Dang_mo');
+('STK001', 'KH001', 'GTK002', 'NV002', 10000000, 10000000, 4.50, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Dang_mo'),
+('STK002', 'KH002', 'GTK003', 'NV002', 20000000, 20000000, 5.50, GETDATE(), DATEADD(MONTH, 6, GETDATE()), N'Dang_mo'),
+('STK003', 'KH003', 'GTK004', 'NV003', 50000000, 50000000, 6.80, GETDATE(), DATEADD(MONTH, 12, GETDATE()), N'Dang_mo'),
+('STK004', 'KH004', 'GTK001', 'NV003', 15000000, 15000000, 0.50, GETDATE(), NULL, N'Dang_mo'),
+('STK005', 'KH005', 'GTK005', 'NV002', 30000000, 30000000, 7.20, GETDATE(), DATEADD(MONTH, 24, GETDATE()), N'Dang_mo');
 
 INSERT INTO giao_dich VALUES
 ('GD001', 'STK001', 'NV002', N'Gui_them', 2000000, GETDATE()),
@@ -159,6 +170,7 @@ BEGIN
     INSERT INTO khach_hang
     VALUES (@new_id, @so_cccd, @ho_ten, @so_dien_thoai, @dia_chi);
 END;
+
 
 CREATE OR ALTER PROC sp_sua_khach_hang
     @ma_khach_hang VARCHAR(10),

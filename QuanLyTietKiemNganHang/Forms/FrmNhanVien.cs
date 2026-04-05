@@ -4,7 +4,6 @@ using QuanLyTietKiemNganHang.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -13,7 +12,7 @@ namespace QuanLyTietKiemNganHang.Forms
     public partial class FrmNhanVien : Form
     {
         private readonly NhanVienService service = new NhanVienService();
-        private int selectedId;
+        private string selectedMaNhanVien = string.Empty;
 
         public FrmNhanVien()
         {
@@ -49,12 +48,11 @@ namespace QuanLyTietKiemNganHang.Forms
             StyleTextBox(txtMa);
             StyleTextBox(txtHoTen);
             StyleTextBox(txtSDT);
-            StyleTextBox(txtEmail);
-            StyleTextBox(txtChucVu);
-            StyleTextBox(txtLuong);
-            StyleDatePicker(dtpNgayVaoLam);
             StyleComboBox(cboTrangThai);
             GridStyler.Apply(grid);
+
+            txtMa.ReadOnly = true;
+            txtSDT.UseSystemPasswordChar = true;
 
             StylePrimaryButton(btnThem);
             StyleSecondaryButton(btnSua);
@@ -65,30 +63,20 @@ namespace QuanLyTietKiemNganHang.Forms
         private void BuildFields()
         {
             cboTrangThai.Items.Clear();
-            cboTrangThai.Items.AddRange(new object[] { "Đang làm", "Nghỉ phép", "Nghỉ việc" });
+            cboTrangThai.Items.AddRange(new object[] { "Admin", "Giao_dich_vien" });
 
             fieldsPanel.SuspendLayout();
             fieldsPanel.Controls.Clear();
             fieldsPanel.Controls.Add(CreateInputGroup("Mã nhân viên", txtMa));
-            fieldsPanel.Controls.Add(CreateInputGroup("Họ tên", txtHoTen));
-            fieldsPanel.Controls.Add(CreateInputGroup("Số điện thoại", txtSDT));
-            fieldsPanel.Controls.Add(CreateInputGroup("Email", txtEmail));
-            fieldsPanel.Controls.Add(CreateInputGroup("Chức vụ", txtChucVu));
-            fieldsPanel.Controls.Add(CreateInputGroup("Lương cơ bản", txtLuong));
-            fieldsPanel.Controls.Add(CreateInputGroup("Ngày vào làm", dtpNgayVaoLam));
-            fieldsPanel.Controls.Add(CreateInputGroup("Trạng thái", cboTrangThai));
+            fieldsPanel.Controls.Add(CreateInputGroup("Tài khoản", txtHoTen));
+            fieldsPanel.Controls.Add(CreateInputGroup("Mật khẩu", txtSDT));
+            fieldsPanel.Controls.Add(CreateInputGroup("Vai trò", cboTrangThai));
             fieldsPanel.ResumeLayout();
         }
 
         private Panel CreateInputGroup(string labelText, Control inputControl)
         {
-            var container = new Panel
-            {
-                Width = 304,
-                Height = 74,
-                Margin = new Padding(0, 0, 0, 10)
-            };
-
+            var container = new Panel { Width = 304, Height = 74, Margin = new Padding(0, 0, 0, 10) };
             var label = new Label
             {
                 AutoSize = true,
@@ -97,16 +85,9 @@ namespace QuanLyTietKiemNganHang.Forms
                 ForeColor = ControlFactory.TextColor,
                 Location = new Point(0, 0)
             };
-
             inputControl.Location = new Point(0, 28);
             inputControl.Width = 286;
             inputControl.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-
-            if (inputControl is DateTimePicker picker)
-            {
-                picker.Format = DateTimePickerFormat.Short;
-            }
-
             container.Controls.Add(label);
             container.Controls.Add(inputControl);
             return container;
@@ -128,12 +109,6 @@ namespace QuanLyTietKiemNganHang.Forms
             textBox.BorderStyle = BorderStyle.FixedSingle;
             textBox.BackColor = Color.White;
             textBox.ForeColor = ControlFactory.TextColor;
-        }
-
-        private static void StyleDatePicker(DateTimePicker picker)
-        {
-            picker.Font = new Font("Segoe UI", 10);
-            picker.CalendarForeColor = ControlFactory.TextColor;
         }
 
         private static void StyleComboBox(ComboBox comboBox)
@@ -185,56 +160,45 @@ namespace QuanLyTietKiemNganHang.Forms
             grid.DataSource = null;
             grid.DataSource = data.Select(x => new
             {
-                x.Id,
                 x.MaNhanVien,
-                x.HoTen,
-                x.SoDienThoai,
-                x.Email,
-                x.ChucVu,
-                NgayVaoLam = x.NgayVaoLam.ToString("dd/MM/yyyy"),
-                LuongCoBan = x.LuongCoBan.ToString("N0"),
-                x.TrangThai
+                x.TaiKhoan,
+                MatKhau = new string('*', string.IsNullOrEmpty(x.MatKhau) ? 0 : x.MatKhau.Length),
+                x.VaiTro
             }).ToList();
 
-            if (grid.Columns["Id"] != null) grid.Columns["Id"].Visible = false;
             if (grid.Columns["MaNhanVien"] != null) grid.Columns["MaNhanVien"].HeaderText = "Mã NV";
-            if (grid.Columns["HoTen"] != null) grid.Columns["HoTen"].HeaderText = "Họ tên";
-            if (grid.Columns["SoDienThoai"] != null) grid.Columns["SoDienThoai"].HeaderText = "SĐT";
-            if (grid.Columns["NgayVaoLam"] != null) grid.Columns["NgayVaoLam"].HeaderText = "Ngày vào làm";
-            if (grid.Columns["LuongCoBan"] != null) grid.Columns["LuongCoBan"].HeaderText = "Lương";
+            if (grid.Columns["TaiKhoan"] != null) grid.Columns["TaiKhoan"].HeaderText = "Tài khoản";
+            if (grid.Columns["MatKhau"] != null) grid.Columns["MatKhau"].HeaderText = "Mật khẩu";
+            if (grid.Columns["VaiTro"] != null) grid.Columns["VaiTro"].HeaderText = "Vai trò";
         }
 
         private void Grid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-            var row = grid.Rows[e.RowIndex];
-            selectedId = Convert.ToInt32(row.Cells["Id"].Value);
-            txtMa.Text = row.Cells["MaNhanVien"].Value?.ToString() ?? string.Empty;
-            txtHoTen.Text = row.Cells["HoTen"].Value?.ToString() ?? string.Empty;
-            txtSDT.Text = row.Cells["SoDienThoai"].Value?.ToString() ?? string.Empty;
-            txtEmail.Text = row.Cells["Email"].Value?.ToString() ?? string.Empty;
-            txtChucVu.Text = row.Cells["ChucVu"].Value?.ToString() ?? string.Empty;
-            txtLuong.Text = (row.Cells["LuongCoBan"].Value?.ToString() ?? string.Empty).Replace(",", string.Empty);
-            dtpNgayVaoLam.Value = DateTime.ParseExact(row.Cells["NgayVaoLam"].Value.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            cboTrangThai.Text = row.Cells["TrangThai"].Value?.ToString() ?? "Đang làm";
-            lblSelected.Text = "Đang chọn: " + txtMa.Text + " - " + txtHoTen.Text;
+
+            var maNhanVien = grid.Rows[e.RowIndex].Cells["MaNhanVien"].Value?.ToString() ?? string.Empty;
+            var model = service.GetAll().FirstOrDefault(x => x.MaNhanVien == maNhanVien);
+            if (model == null) return;
+
+            selectedMaNhanVien = model.MaNhanVien;
+            txtMa.Text = model.MaNhanVien;
+            txtHoTen.Text = model.TaiKhoan;
+            txtSDT.Text = model.MatKhau;
+            cboTrangThai.Text = model.VaiTro;
+            lblSelected.Text = "Đang chọn: " + model.MaNhanVien + " - " + model.TaiKhoan;
         }
 
         private void Save(bool isUpdate)
         {
-            var currentId = isUpdate ? selectedId : 0;
-            var maNhanVien = txtMa.Text.Trim();
+            var taiKhoan = txtHoTen.Text.Trim();
+            var matKhau = txtSDT.Text.Trim();
+            var vaiTro = cboTrangThai.Text.Trim();
             var errors = new List<string>();
-            if (!FormValidator.Required(maNhanVien)) errors.Add("- Mã nhân viên không được để trống");
-            if (!FormValidator.Required(txtHoTen.Text)) errors.Add("- Họ tên không được để trống");
-            if (!FormValidator.IsPhone(txtSDT.Text)) errors.Add("- Số điện thoại không hợp lệ");
-            if (!FormValidator.IsEmail(txtEmail.Text)) errors.Add("- Email không hợp lệ");
-            if (!FormValidator.Required(txtChucVu.Text)) errors.Add("- Chức vụ không được để trống");
-            if (FormValidator.Required(maNhanVien) && service.IsDuplicateMaNhanVien(maNhanVien, currentId)) errors.Add("- Mã nhân viên đã tồn tại");
 
-            decimal luong;
-            if (!decimal.TryParse(txtLuong.Text, out luong) || !FormValidator.Positive(luong))
-                errors.Add("- Lương cơ bản phải lớn hơn 0");
+            if (!FormValidator.Required(taiKhoan)) errors.Add("- Tài khoản không được để trống");
+            if (!FormValidator.Required(matKhau)) errors.Add("- Mật khẩu không được để trống");
+            if (!FormValidator.Required(vaiTro)) errors.Add("- Vai trò không được để trống");
+            if (service.ExistsTaiKhoan(taiKhoan, isUpdate ? selectedMaNhanVien : string.Empty)) errors.Add("- Tài khoản đã tồn tại");
 
             if (errors.Any())
             {
@@ -244,24 +208,20 @@ namespace QuanLyTietKiemNganHang.Forms
 
             var model = new NhanVien
             {
-                Id = selectedId,
-                MaNhanVien = maNhanVien,
-                HoTen = txtHoTen.Text.Trim(),
-                SoDienThoai = txtSDT.Text.Trim(),
-                Email = txtEmail.Text.Trim(),
-                ChucVu = txtChucVu.Text.Trim(),
-                NgayVaoLam = dtpNgayVaoLam.Value.Date,
-                LuongCoBan = luong,
-                TrangThai = cboTrangThai.Text
+                MaNhanVien = txtMa.Text.Trim(),
+                TaiKhoan = taiKhoan,
+                MatKhau = matKhau,
+                VaiTro = vaiTro
             };
 
             if (isUpdate)
             {
-                if (selectedId == 0)
+                if (string.IsNullOrWhiteSpace(selectedMaNhanVien))
                 {
                     MessageBox.Show("Vui lòng chọn nhân viên cần sửa.");
                     return;
                 }
+                model.MaNhanVien = selectedMaNhanVien;
                 service.Update(model);
                 MessageBox.Show("Cập nhật nhân viên thành công.");
             }
@@ -270,13 +230,14 @@ namespace QuanLyTietKiemNganHang.Forms
                 service.Add(model);
                 MessageBox.Show("Thêm nhân viên thành công.");
             }
+
             LoadData();
             ResetForm();
         }
 
         private void BtnXoa_Click(object sender, EventArgs e)
         {
-            if (selectedId == 0)
+            if (string.IsNullOrWhiteSpace(selectedMaNhanVien))
             {
                 MessageBox.Show("Vui lòng chọn nhân viên cần xóa.");
                 return;
@@ -287,7 +248,7 @@ namespace QuanLyTietKiemNganHang.Forms
                 return;
             }
 
-            service.Delete(selectedId);
+            service.Delete(selectedMaNhanVien);
             LoadData();
             ResetForm();
             MessageBox.Show("Xóa nhân viên thành công.");
@@ -295,16 +256,13 @@ namespace QuanLyTietKiemNganHang.Forms
 
         private void ResetForm(bool reloadGrid = true)
         {
-            selectedId = 0;
+            selectedMaNhanVien = string.Empty;
             txtMa.Clear();
             txtHoTen.Clear();
             txtSDT.Clear();
-            txtEmail.Clear();
-            txtChucVu.Clear();
-            txtLuong.Clear();
-            dtpNgayVaoLam.Value = DateTime.Today;
             cboTrangThai.SelectedIndex = cboTrangThai.Items.Count > 0 ? 0 : -1;
             lblSelected.Text = "Chưa chọn nhân viên nào.";
+
             if (reloadGrid)
             {
                 txtSearch.Clear();

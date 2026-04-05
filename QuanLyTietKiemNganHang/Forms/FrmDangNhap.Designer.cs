@@ -82,7 +82,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.lblHint.Name = "lblHint";
             this.lblHint.Size = new System.Drawing.Size(159, 13);
             this.lblHint.TabIndex = 8;
-            this.lblHint.Text = "Mock account: NV001 / 123456";
+            this.lblHint.Text = "Đăng nhập bằng tài khoản trong bảng nhan_vien của SQL Server";
             // 
             // btnExit
             // 
@@ -134,7 +134,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(330, 20);
             this.txtUsername.TabIndex = 2;
-            this.txtUsername.Text = "NV001";
+            this.txtUsername.Text = "admin";
             // 
             // lblUser
             // 

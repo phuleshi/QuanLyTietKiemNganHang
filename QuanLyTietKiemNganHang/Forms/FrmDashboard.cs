@@ -17,7 +17,14 @@ namespace QuanLyTietKiemNganHang.Forms
             InitializeComponent();
             ApplyTheme();
             WireEvents();
-            LoadStats();
+            try
+            {
+                LoadStats();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("Không tải được dữ liệu dashboard từ SQL Server: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ApplyTheme()
@@ -33,7 +40,7 @@ namespace QuanLyTietKiemNganHang.Forms
             lblTitle.ForeColor = ControlFactory.TextColor;
             lblUser.Font = new Font("Segoe UI", 9);
             lblUser.ForeColor = ControlFactory.MutedTextColor;
-            lblUser.Text = "Xin chào, " + currentUser.HoTen + " (" + currentUser.MaNhanVien + ")";
+            lblUser.Text = "Xin chào, " + currentUser.TaiKhoan + " (" + currentUser.MaNhanVien + " - " + currentUser.VaiTro + ")";
 
             lblMenu.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             lblMenu.ForeColor = Color.FromArgb(191, 219, 254);
@@ -87,10 +94,10 @@ namespace QuanLyTietKiemNganHang.Forms
             cardsPanel.Controls.Add(ControlFactory.CreateCard("Tổng khách hàng", stats.TongKhachHang.ToString(), ControlFactory.SuccessColor), 0, 0);
             cardsPanel.Controls.Add(ControlFactory.CreateCard("Tổng nhân viên", stats.TongNhanVien.ToString(), Color.FromArgb(168, 85, 247)), 1, 0);
             cardsPanel.Controls.Add(ControlFactory.CreateCard("Tổng sổ tiết kiệm", stats.TongSoTietKiem.ToString(), Color.FromArgb(14, 165, 233)), 2, 0);
-            cardsPanel.Controls.Add(ControlFactory.CreateCard("Khách hàng hoạt động", stats.KhachHangHoatDong.ToString(), ControlFactory.WarningColor), 0, 1);
-            cardsPanel.Controls.Add(ControlFactory.CreateCard("Nhân viên đang làm", stats.NhanVienDangLam.ToString(), ControlFactory.PrimaryColor), 1, 1);
-            cardsPanel.Controls.Add(ControlFactory.CreateCard("Sổ đang hoạt động", stats.SoTietKiemDangHoatDong.ToString(), Color.FromArgb(5, 150, 105)), 2, 1);
-            lblThongBao.Text = stats.ThongBaoHeThong + "Phạm vi hiện tại chỉ gồm Login, Dashboard, CRUD Khách hàng, CRUD Nhân viên và test giao diện.";
+            cardsPanel.Controls.Add(ControlFactory.CreateCard("Sổ đang mở", stats.SoTietKiemDangMo.ToString(), ControlFactory.WarningColor), 0, 1);
+            cardsPanel.Controls.Add(ControlFactory.CreateCard("Tổng giao dịch", stats.SoGiaoDich.ToString(), ControlFactory.PrimaryColor), 1, 1);
+            cardsPanel.Controls.Add(ControlFactory.CreateCard("Gói tiết kiệm", stats.SoGoiTietKiem.ToString(), Color.FromArgb(5, 150, 105)), 2, 1);
+            lblThongBao.Text = stats.ThongBaoHeThong;
         }
     }
 }
