@@ -168,7 +168,8 @@ namespace QuanLyTietKiemNganHang.Forms
         {
             if (e.RowIndex < 0) return;
 
-            var maKhachHang = grid.Rows[e.RowIndex].Cells["MaKhachHang"].Value?.ToString() ?? string.Empty;
+            var value = grid.Rows[e.RowIndex].Cells["MaKhachHang"].Value;
+            var maKhachHang = value != null ? value.ToString() : string.Empty;
             var model = service.GetAll().FirstOrDefault(x => x.MaKhachHang == maKhachHang);
             if (model == null) return;
 

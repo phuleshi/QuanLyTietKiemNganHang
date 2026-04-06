@@ -11,7 +11,7 @@ namespace QuanLyTietKiemNganHang.Services
         public List<NhanVien> GetAll()
         {
             var table = Db.ExecuteDataTable(
-                @"SELECT ma_nv, tai_khoan, mat_khau, vai_tro
+                @"SELECT ma_nv, ten_nhan_vien, tai_khoan, mat_khau, vai_tro
                   FROM nhan_vien
                   ORDER BY ma_nv",
                 CommandType.Text);
@@ -28,9 +28,10 @@ namespace QuanLyTietKiemNganHang.Services
             }
 
             var table = Db.ExecuteDataTable(
-                @"SELECT ma_nv, tai_khoan, mat_khau, vai_tro
+                @"SELECT ma_nv, ten_nhan_vien, tai_khoan, mat_khau, vai_tro
                   FROM nhan_vien
                   WHERE ma_nv LIKE @keyword
+                     OR ten_nhan_vien LIKE @keyword
                      OR tai_khoan LIKE @keyword
                      OR vai_tro LIKE @keyword
                   ORDER BY ma_nv",
@@ -68,6 +69,7 @@ namespace QuanLyTietKiemNganHang.Services
             Db.ExecuteNonQuery(
                 "sp_them_nhan_vien",
                 CommandType.StoredProcedure,
+                new SqlParameter("@ten_nhan_vien", model.TenNhanVien),
                 new SqlParameter("@tai_khoan", model.TaiKhoan),
                 new SqlParameter("@mat_khau", model.MatKhau),
                 new SqlParameter("@vai_tro", model.VaiTro));
@@ -78,6 +80,7 @@ namespace QuanLyTietKiemNganHang.Services
             Db.ExecuteNonQuery(
                 "sp_sua_nhan_vien",
                 CommandType.StoredProcedure,
+                new SqlParameter("@ten_nhan_vien", model.TenNhanVien),
                 new SqlParameter("@ma_nv", model.MaNhanVien),
                 new SqlParameter("@tai_khoan", model.TaiKhoan),
                 new SqlParameter("@mat_khau", model.MatKhau),
@@ -97,6 +100,7 @@ namespace QuanLyTietKiemNganHang.Services
             return new NhanVien
             {
                 MaNhanVien = row["ma_nv"].ToString(),
+                TenNhanVien = row["ten_nhan_vien"].ToString(),
                 TaiKhoan = row["tai_khoan"].ToString(),
                 MatKhau = row["mat_khau"].ToString(),
                 VaiTro = row["vai_tro"].ToString()

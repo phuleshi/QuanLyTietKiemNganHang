@@ -40,7 +40,9 @@ namespace QuanLyTietKiemNganHang.Forms
             lblTitle.ForeColor = ControlFactory.TextColor;
             lblUser.Font = new Font("Segoe UI", 9);
             lblUser.ForeColor = ControlFactory.MutedTextColor;
-            lblUser.Text = "Xin chào, " + currentUser.TaiKhoan + " (" + currentUser.MaNhanVien + " - " + currentUser.VaiTro + ")";
+
+            var tenNhanVien = string.IsNullOrWhiteSpace(currentUser.TenNhanVien) ? currentUser.TaiKhoan : currentUser.TenNhanVien;
+            lblUser.Text = "Xin chào, " + tenNhanVien + " (" + currentUser.MaNhanVien + " - " + currentUser.VaiTro + ")";
 
             lblMenu.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             lblMenu.ForeColor = Color.FromArgb(191, 219, 254);
@@ -54,6 +56,8 @@ namespace QuanLyTietKiemNganHang.Forms
             StyleSecondaryButton(btnLogout);
             StyleSidebarButton(btnKhachHang);
             StyleSidebarButton(btnNhanVien);
+            StyleSidebarButton(btnMoSo);
+            StyleSidebarButton(btnDanhSachSo);
         }
 
         private void WireEvents()
@@ -61,6 +65,8 @@ namespace QuanLyTietKiemNganHang.Forms
             btnLogout.Click += (s, e) => Close();
             btnKhachHang.Click += (s, e) => new FrmKhachHang().ShowDialog();
             btnNhanVien.Click += (s, e) => new FrmNhanVien().ShowDialog();
+            btnMoSo.Click += (s, e) => new FrmMoSo(currentUser).ShowDialog();
+            btnDanhSachSo.Click += (s, e) => new FrmDanhSachSo(currentUser).ShowDialog();
             topPanel.Resize += (s, e) => btnLogout.Left = topPanel.Width - btnLogout.Width - 24;
         }
 

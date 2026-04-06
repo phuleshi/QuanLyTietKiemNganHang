@@ -5,6 +5,8 @@ GO
 USE QuanLyTietKiem;
 GO
 
+DROP DATABASE QuanLyTietKiem
+
 --------------------------------------------------
 -- 1. Bảng Khách Hàng
 --------------------------------------------------
@@ -34,6 +36,7 @@ select * from goi_tiet_kiem
 --------------------------------------------------
 CREATE TABLE nhan_vien (
     ma_nv VARCHAR(10) PRIMARY KEY, -- NV001
+    ten_nhan_vien NVARCHAR(100) NOT NULL,
     tai_khoan VARCHAR(50) UNIQUE NOT NULL,
     mat_khau NVARCHAR(255) NOT NULL,
     vai_tro NVARCHAR(20) CHECK (vai_tro IN (N'Admin', N'Giao_dich_vien'))
@@ -105,7 +108,7 @@ CREATE TABLE nhat_ky_he_thong (
     FOREIGN KEY (ma_nhan_vien) REFERENCES nhan_vien(ma_nv)
 );
 
-select * from nhat_ky_he_thong
+select * from khach_hang
 
 INSERT INTO khach_hang VALUES
 ('KH001', '001234567890', N'Nguyễn Văn An', '0901234567', N'Hà Nội'),
@@ -122,28 +125,9 @@ INSERT INTO goi_tiet_kiem VALUES
 ('GTK005', N'24 tháng', 7.20, 24);
 
 INSERT INTO nhan_vien VALUES
-('NV001', 'admin', '123456', N'Admin'),
-('NV002', 'gdv01', '123456', N'Giao_dich_vien'),
-('NV003', 'gdv02', '123456', N'Giao_dich_vien');
-
-INSERT INTO so_tiet_kiem VALUES
-('STK001', 'KH001', 'GTK002', 'NV002', 10000000, 10000000, 4.50, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Dang_mo'),
-('STK002', 'KH002', 'GTK003', 'NV002', 20000000, 20000000, 5.50, GETDATE(), DATEADD(MONTH, 6, GETDATE()), N'Dang_mo'),
-('STK003', 'KH003', 'GTK004', 'NV003', 50000000, 50000000, 6.80, GETDATE(), DATEADD(MONTH, 12, GETDATE()), N'Dang_mo'),
-('STK004', 'KH004', 'GTK001', 'NV003', 15000000, 15000000, 0.50, GETDATE(), NULL, N'Dang_mo'),
-('STK005', 'KH005', 'GTK005', 'NV002', 30000000, 30000000, 7.20, GETDATE(), DATEADD(MONTH, 24, GETDATE()), N'Dang_mo');
-
-INSERT INTO giao_dich VALUES
-('GD001', 'STK001', 'NV002', N'Gui_them', 2000000, GETDATE()),
-('GD002', 'STK002', 'NV002', N'Rut_tien', 5000000, GETDATE()),
-('GD003', 'STK003', 'NV003', N'Tra_lai', 1000000, GETDATE()),
-('GD004', 'STK004', 'NV003', N'Gui_them', 3000000, GETDATE()),
-('GD005', 'STK005', 'NV002', N'Tra_lai', 2000000, GETDATE());
-
-INSERT INTO nhat_ky_he_thong VALUES
-('NK001', 'NV001', N'Thêm khách hàng', N'khach_hang', NULL, N'KH001', GETDATE()),
-('NK002', 'NV002', N'Mở sổ tiết kiệm', N'so_tiet_kiem', NULL, N'STK001', GETDATE()),
-('NK003', 'NV003', N'Thực hiện giao dịch', N'giao_dich', NULL, N'GD001', GETDATE());
+('NV001', N'Quản trị hệ thống', 'admin' , '123456', N'Admin'),
+('NV002',  N'Nguyễn Văn Giao', 'gdv01', '123456', N'Giao_dich_vien'),
+('NV003', N'Trần Thị Dịch', 'gdv02', '123456', N'Giao_dich_vien');
 
 CREATE OR ALTER PROC sp_them_khach_hang
     @so_cccd VARCHAR(20),
@@ -195,6 +179,7 @@ BEGIN
 END;
 
 CREATE OR ALTER PROC sp_them_nhan_vien
+    @ten_nhan_vien NVARCHAR(100),
     @tai_khoan VARCHAR(50),
     @mat_khau NVARCHAR(255),
     @vai_tro NVARCHAR(20)
@@ -211,10 +196,11 @@ BEGIN
     SET @new_id = 'NV' + RIGHT('000' + CAST(@max_num + 1 AS VARCHAR), 3);
 
     INSERT INTO nhan_vien
-    VALUES (@new_id, @tai_khoan, @mat_khau, @vai_tro);
+    VALUES (@new_id, @ten_nhan_vien, @tai_khoan, @mat_khau, @vai_tro);
 END;
 
 CREATE OR ALTER PROC sp_sua_nhan_vien
+    @ten_nhan_vien NVARCHAR(100),
     @ma_nv VARCHAR(10),
     @tai_khoan VARCHAR(50),
     @mat_khau NVARCHAR(255),
@@ -222,7 +208,8 @@ CREATE OR ALTER PROC sp_sua_nhan_vien
 AS
 BEGIN
     UPDATE nhan_vien
-    SET tai_khoan = @tai_khoan,
+    SET ten_nhan_vien= @ten_nhan_vien,
+        tai_khoan = @tai_khoan,
         mat_khau = @mat_khau,
         vai_tro = @vai_tro
     WHERE ma_nv = @ma_nv;

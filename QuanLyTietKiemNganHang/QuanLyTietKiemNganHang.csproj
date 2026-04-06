@@ -46,19 +46,45 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
-    <Compile Include="Forms\FrmDangNhap.cs"><SubType>Form</SubType></Compile>
+    <Compile Include="Forms\FrmDangNhap.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FrmDangNhap.Designer.cs">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FrmDashboard.cs"><SubType>Form</SubType></Compile>
+    <Compile Include="Forms\FrmDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FrmDashboard.Designer.cs">
       <DependentUpon>FrmDashboard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FrmKhachHang.cs"><SubType>Form</SubType></Compile>
+    <Compile Include="Forms\FrmKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FrmKhachHang.Designer.cs">
       <DependentUpon>FrmKhachHang.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FrmNhanVien.cs"><SubType>Form</SubType></Compile>
+    <Compile Include="Forms\FrmChiTietSo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmChiTietSo.Designer.cs">
+      <DependentUpon>FrmChiTietSo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmMoSo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmMoSo.Designer.cs">
+      <DependentUpon>FrmMoSo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmDanhSachSo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmDanhSachSo.Designer.cs">
+      <DependentUpon>FrmDanhSachSo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmNhanVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FrmNhanVien.Designer.cs">
       <DependentUpon>FrmNhanVien.cs</DependentUpon>
     </Compile>
@@ -68,15 +94,21 @@
     <Compile Include="Models\KhachHang.cs" />
     <Compile Include="Models\NhanVien.cs" />
     <Compile Include="Models\DashboardStats.cs" />
+    <Compile Include="Models\LoaiTietKiem.cs" />
     <Compile Include="Models\SoTietKiem.cs" />
+    <Compile Include="Models\SoTietKiemDanhSachItem.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\KhachHangService.cs" />
     <Compile Include="Services\NhanVienService.cs" />
     <Compile Include="Services\DashboardService.cs" />
     <Compile Include="Services\MockDatabase.cs" />
     <Compile Include="Services\Db.cs" />
+    <Compile Include="Services\XuLySoTietKiem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\FrmChiTietSo.resx">
+      <DependentUpon>FrmChiTietSo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmDangNhap.resx">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
     </EmbeddedResource>

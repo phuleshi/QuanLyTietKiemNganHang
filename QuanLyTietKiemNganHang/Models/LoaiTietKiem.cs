@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace QuanLyTietKiemNganHang.Models
 {
-    internal class LoaiTietKiem
+    public class LoaiTietKiem
     {
+        public string MaGoi { get; set; }
+        public string TenGoi { get; set; }
+        public decimal LaiSuatNam { get; set; }
+        public int KyHanThang { get; set; }
+
+        public string KyHanHienThi
+        {
+            get { return KyHanThang <= 0 ? "Không kỳ hạn" : KyHanThang + " tháng"; }
+        }
+
+        public string HienThiCombo
+        {
+            get { return TenGoi + " - " + KyHanHienThi; }
+        }
     }
 }
