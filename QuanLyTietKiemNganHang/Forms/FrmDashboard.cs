@@ -58,6 +58,10 @@ namespace QuanLyTietKiemNganHang.Forms
             StyleSidebarButton(btnNhanVien);
             StyleSidebarButton(btnMoSo);
             StyleSidebarButton(btnDanhSachSo);
+            StyleSidebarButton(btnGiaoDich);
+            StyleSidebarButton(btnLoaiTietKiem);
+            StyleSidebarButton(btnTatToan);
+            StyleSidebarButton(btnLichSu);
         }
 
         private void WireEvents()
@@ -67,6 +71,10 @@ namespace QuanLyTietKiemNganHang.Forms
             btnNhanVien.Click += (s, e) => new FrmNhanVien().ShowDialog();
             btnMoSo.Click += (s, e) => new FrmMoSo(currentUser).ShowDialog();
             btnDanhSachSo.Click += (s, e) => new FrmDanhSachSo(currentUser).ShowDialog();
+            btnGiaoDich.Click += (s, e) => new FrmGiaoDich().ShowDialog();
+            btnLoaiTietKiem.Click += (s, e) => new FrmLoaiTietKiem().ShowDialog();
+            btnTatToan.Click += (s, e) => new FrmTatToan(currentUser, null).ShowDialog();
+            btnLichSu.Click += (s, e) => new FrmLichSuHoatDong().ShowDialog();
             topPanel.Resize += (s, e) => btnLogout.Left = topPanel.Width - btnLogout.Width - 24;
         }
 

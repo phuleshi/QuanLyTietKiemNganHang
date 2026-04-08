@@ -14,6 +14,10 @@ namespace QuanLyTietKiemNganHang.Forms
         private System.Windows.Forms.Button btnNhanVien;
         private System.Windows.Forms.Button btnMoSo;
         private System.Windows.Forms.Button btnDanhSachSo;
+        private System.Windows.Forms.Button btnGiaoDich;
+        private System.Windows.Forms.Button btnLoaiTietKiem;
+        private System.Windows.Forms.Button btnTatToan;
+        private System.Windows.Forms.Button btnLichSu;
         private System.Windows.Forms.Panel contentPanel;
         private System.Windows.Forms.TableLayoutPanel cardsPanel;
         private System.Windows.Forms.Panel announceCard;
@@ -33,6 +37,10 @@ namespace QuanLyTietKiemNganHang.Forms
             this.lblUser = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
             this.sidebar = new System.Windows.Forms.Panel();
+            this.btnLichSu = new System.Windows.Forms.Button();
+            this.btnTatToan = new System.Windows.Forms.Button();
+            this.btnLoaiTietKiem = new System.Windows.Forms.Button();
+            this.btnGiaoDich = new System.Windows.Forms.Button();
             this.btnDanhSachSo = new System.Windows.Forms.Button();
             this.btnMoSo = new System.Windows.Forms.Button();
             this.btnNhanVien = new System.Windows.Forms.Button();
@@ -92,6 +100,10 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             // sidebar
             // 
+            this.sidebar.Controls.Add(this.btnLichSu);
+            this.sidebar.Controls.Add(this.btnTatToan);
+            this.sidebar.Controls.Add(this.btnLoaiTietKiem);
+            this.sidebar.Controls.Add(this.btnGiaoDich);
             this.sidebar.Controls.Add(this.btnDanhSachSo);
             this.sidebar.Controls.Add(this.btnMoSo);
             this.sidebar.Controls.Add(this.btnNhanVien);
@@ -104,6 +116,42 @@ namespace QuanLyTietKiemNganHang.Forms
             this.sidebar.Padding = new System.Windows.Forms.Padding(20, 24, 20, 24);
             this.sidebar.Size = new System.Drawing.Size(230, 657);
             this.sidebar.TabIndex = 1;
+            // 
+            // btnLichSu
+            // 
+            this.btnLichSu.Location = new System.Drawing.Point(20, 482);
+            this.btnLichSu.Name = "btnLichSu";
+            this.btnLichSu.Size = new System.Drawing.Size(188, 42);
+            this.btnLichSu.TabIndex = 9;
+            this.btnLichSu.Text = "Lịch sử hoạt động";
+            this.btnLichSu.UseVisualStyleBackColor = true;
+            // 
+            // btnTatToan
+            // 
+            this.btnTatToan.Location = new System.Drawing.Point(20, 430);
+            this.btnTatToan.Name = "btnTatToan";
+            this.btnTatToan.Size = new System.Drawing.Size(188, 42);
+            this.btnTatToan.TabIndex = 8;
+            this.btnTatToan.Text = "Tất toán / Rút gốc";
+            this.btnTatToan.UseVisualStyleBackColor = true;
+            // 
+            // btnLoaiTietKiem
+            // 
+            this.btnLoaiTietKiem.Location = new System.Drawing.Point(20, 378);
+            this.btnLoaiTietKiem.Name = "btnLoaiTietKiem";
+            this.btnLoaiTietKiem.Size = new System.Drawing.Size(188, 42);
+            this.btnLoaiTietKiem.TabIndex = 7;
+            this.btnLoaiTietKiem.Text = "Gói tiết kiệm";
+            this.btnLoaiTietKiem.UseVisualStyleBackColor = true;
+            // 
+            // btnGiaoDich
+            // 
+            this.btnGiaoDich.Location = new System.Drawing.Point(20, 326);
+            this.btnGiaoDich.Name = "btnGiaoDich";
+            this.btnGiaoDich.Size = new System.Drawing.Size(188, 42);
+            this.btnGiaoDich.TabIndex = 6;
+            this.btnGiaoDich.Text = "Giao dịch";
+            this.btnGiaoDich.UseVisualStyleBackColor = true;
             // 
             // btnDanhSachSo
             // 

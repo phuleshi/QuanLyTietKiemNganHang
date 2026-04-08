@@ -203,11 +203,13 @@ namespace QuanLyTietKiemNganHang.Forms
                 return;
             }
 
-            MessageBox.Show(
-                "Nút tất toán hiện mới là giao diện, chưa triển khai xử lý nghiệp vụ.",
-                "Chưa triển khai",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            using (var form = new FrmTatToan(currentUser, selected.MaSo))
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadData();
+                }
+            }
         }
 
         private void BtnRutGoc_Click(object sender, EventArgs e)
@@ -219,11 +221,13 @@ namespace QuanLyTietKiemNganHang.Forms
                 return;
             }
 
-            MessageBox.Show(
-                "Nút rút gốc từng phần hiện mới là giao diện, chưa triển khai xử lý nghiệp vụ.",
-                "Chưa triển khai",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            using (var form = new FrmTatToan(currentUser, selected.MaSo))
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadData();
+                }
+            }
         }
 
         private SoTietKiemDanhSachItem GetSelectedItem()

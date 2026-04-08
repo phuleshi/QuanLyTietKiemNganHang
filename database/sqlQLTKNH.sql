@@ -1,11 +1,12 @@
-﻿-- Tạo database
-CREATE DATABASE QuanLyTietKiem;
+﻿-- Tạo database (an toàn khi chạy nhiều lần)
+IF DB_ID('QuanLyTietKiem') IS NULL
+BEGIN
+    CREATE DATABASE QuanLyTietKiem;
+END
 GO
 
 USE QuanLyTietKiem;
 GO
-
-DROP DATABASE QuanLyTietKiem
 
 --------------------------------------------------
 -- 1. Bảng Khách Hàng
@@ -339,3 +340,5 @@ BEGIN
     DELETE FROM nhat_ky_he_thong
     WHERE ma_nhat_ky = @ma_nhat_ky;
 END;    
+
+Select * from nhan_vien
