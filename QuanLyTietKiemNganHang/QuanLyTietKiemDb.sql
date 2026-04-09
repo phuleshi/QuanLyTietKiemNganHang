@@ -16,7 +16,8 @@ CREATE TABLE khach_hang (
     so_cccd VARCHAR(20) UNIQUE NOT NULL,
     ho_ten NVARCHAR(100) NOT NULL,
     so_dien_thoai VARCHAR(15),
-    dia_chi NVARCHAR(255)
+    dia_chi NVARCHAR(255),
+    trang_thai NVARCHAR(20) NOT NULL DEFAULT N'Active' CHECK (trang_thai IN (N'Active', N'Unactive'))
 );
 
 select * from khach_hang
@@ -112,11 +113,11 @@ CREATE TABLE nhat_ky_he_thong (
 select * from khach_hang
 
 INSERT INTO khach_hang VALUES
-('KH001', '001234567890', N'Nguyễn Văn An', '0901234567', N'Hà Nội'),
-('KH002', '001234567891', N'Trần Thị Bình', '0901234568', N'Hải Phòng'),
-('KH003', '001234567892', N'Lê Văn Cường', '0901234569', N'Đà Nẵng'),
-('KH004', '001234567893', N'Phạm Thị Dung', '0901234570', N'TP. Hồ Chí Minh'),
-('KH005', '001234567894', N'Hoàng Văn Đức', '0901234571', N'Cần Thơ');
+('KH001', '001234567890', N'Nguyễn Văn An', '0901234567', N'Hà Nội', N'Active'),
+('KH002', '001234567891', N'Trần Thị Bình', '0901234568', N'Hải Phòng', N'Active'),
+('KH003', '001234567892', N'Lê Văn Cường', '0901234569', N'Đà Nẵng', N'Active'),
+('KH004', '001234567893', N'Phạm Thị Dung', '0901234570', N'TP. Hồ Chí Minh', N'Active'),
+('KH005', '001234567894', N'Hoàng Văn Đức', '0901234571', N'Cần Thơ', N'Active');
 
 INSERT INTO goi_tiet_kiem VALUES
 ('GTK001', N'Không kỳ hạn', 0.50, 0),
@@ -138,6 +139,12 @@ CREATE OR ALTER PROC sp_them_khach_hang
     @dia_chi NVARCHAR(255)
 AS
 BEGIN
+    IF EXISTS (SELECT 1 FROM khach_hang WHERE so_cccd = @so_cccd)
+    BEGIN
+        RAISERROR (N'CCCD đã tồn tại.', 16, 1);
+        RETURN;
+    END
+
     DECLARE @new_id VARCHAR(10);
     DECLARE @max_num INT;
 
@@ -154,7 +161,7 @@ BEGIN
 
     -- Insert
     INSERT INTO khach_hang
-    VALUES (@new_id, @so_cccd, @ho_ten, @so_dien_thoai, @dia_chi);
+    VALUES (@new_id, @so_cccd, @ho_ten, @so_dien_thoai, @dia_chi, N'Active');
 END;
 GO
 
@@ -174,11 +181,13 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROC sp_xoa_khach_hang
-    @ma_khach_hang VARCHAR(10)
+CREATE OR ALTER PROC sp_cap_nhat_trang_thai_khach_hang
+    @ma_khach_hang VARCHAR(10),
+    @trang_thai NVARCHAR(20)
 AS
 BEGIN
-    DELETE FROM khach_hang
+    UPDATE khach_hang
+    SET trang_thai = @trang_thai
     WHERE ma_khach_hang = @ma_khach_hang;
 END;
 GO
@@ -355,5 +364,3 @@ BEGIN
     WHERE ma_nhat_ky = @ma_nhat_ky;
 END;    
 GO
-
-Select * from nhan_vien

@@ -1,3 +1,4 @@
+using QuanLyTietKiemNganHang.Helpers;
 using QuanLyTietKiemNganHang.Models;
 using System.Data;
 using System.Data.SqlClient;
@@ -28,7 +29,7 @@ namespace QuanLyTietKiemNganHang.Services
                 TenNhanVien = row["ten_nhan_vien"].ToString(),
                 TaiKhoan = row["tai_khoan"].ToString(),
                 MatKhau = row["mat_khau"].ToString(),
-                VaiTro = row["vai_tro"].ToString()
+                VaiTro = RoleHelper.NormalizeRole(row["vai_tro"].ToString())
             };
         }
     }

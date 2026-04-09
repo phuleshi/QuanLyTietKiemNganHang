@@ -109,7 +109,7 @@ CREATE TABLE nhat_ky_he_thong (
     FOREIGN KEY (ma_nhan_vien) REFERENCES nhan_vien(ma_nv)
 );
 
-select * from khach_hang
+select * from nhat_ky_he_thong
 
 INSERT INTO khach_hang VALUES
 ('KH001', '001234567890', N'Nguyễn Văn An', '0901234567', N'Hà Nội'),
@@ -137,6 +137,12 @@ CREATE OR ALTER PROC sp_them_khach_hang
     @dia_chi NVARCHAR(255)
 AS
 BEGIN
+    IF EXISTS (SELECT 1 FROM khach_hang WHERE so_cccd = @so_cccd)
+    BEGIN
+        RAISERROR (N'CCCD đã tồn tại.', 16, 1);
+        RETURN;
+    END
+
     DECLARE @new_id VARCHAR(10);
     DECLARE @max_num INT;
 

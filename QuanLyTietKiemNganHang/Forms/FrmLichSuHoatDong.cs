@@ -1,4 +1,5 @@
 using QuanLyTietKiemNganHang.Helpers;
+using QuanLyTietKiemNganHang.Models;
 using QuanLyTietKiemNganHang.Services;
 using System;
 using System.Drawing;
@@ -10,8 +11,8 @@ namespace QuanLyTietKiemNganHang.Forms
     public partial class FrmLichSuHoatDong : Form
     {
         private readonly XuLyGiaoDich service = new XuLyGiaoDich();
+        private readonly NhanVien currentUser;
 
-        // Added control fields referenced elsewhere in the class
         private Panel topPanel;
         private Panel contentWrap;
         private Panel contentCard;
@@ -19,12 +20,23 @@ namespace QuanLyTietKiemNganHang.Forms
         private Button btnTaiLai;
         private DataGridView grid;
 
-        public FrmLichSuHoatDong()
+        public FrmLichSuHoatDong(NhanVien currentUser)
         {
+            this.currentUser = currentUser;
             InitializeComponent();
             ApplyTheme();
             WireEvents();
+            EnsureAuthorization();
             LoadData();
+        }
+
+        private void EnsureAuthorization()
+        {
+            if (currentUser == null || !currentUser.LaAdmin)
+            {
+                MessageBox.Show("Chỉ admin mới có quyền xem lịch sử hoạt động.", "Không có quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+            }
         }
 
         private void ApplyTheme()
@@ -89,60 +101,37 @@ namespace QuanLyTietKiemNganHang.Forms
             this.grid = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
-            // 
-            // topPanel
-            // 
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Height = 64;
             this.topPanel.Padding = new Padding(12);
             this.topPanel.Controls.Add(this.lblTitle);
             this.topPanel.Controls.Add(this.btnTaiLai);
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Location = new System.Drawing.Point(12, 18);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Text = "Lịch sử hoạt động";
-            // 
-            // btnTaiLai
-            // 
             this.btnTaiLai.Name = "btnTaiLai";
             this.btnTaiLai.Text = "Tải lại";
             this.btnTaiLai.Size = new System.Drawing.Size(90, 32);
             this.btnTaiLai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             this.btnTaiLai.Location = new System.Drawing.Point(700, 16);
-            // 
-            // contentWrap
-            // 
             this.contentWrap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentWrap.Padding = new Padding(12);
             this.contentWrap.Controls.Add(this.contentCard);
-            // 
-            // contentCard
-            // 
             this.contentCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentCard.Padding = new Padding(8);
             this.contentCard.Controls.Add(this.grid);
-            // 
-            // grid
-            // 
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.AllowUserToAddRows = false;
             this.grid.ReadOnly = true;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.AutoGenerateColumns = true;
-
-            // 
-            // FrmLichSuHoatDong
-            // 
             this.ClientSize = new System.Drawing.Size(827, 529);
             this.Controls.Add(this.contentWrap);
             this.Controls.Add(this.topPanel);
             this.Name = "FrmLichSuHoatDong";
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
-
         }
     }
 }

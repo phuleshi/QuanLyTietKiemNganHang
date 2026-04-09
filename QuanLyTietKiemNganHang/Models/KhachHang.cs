@@ -7,6 +7,17 @@ namespace QuanLyTietKiemNganHang.Models
         public string HoTen { get; set; }
         public string SoDienThoai { get; set; }
         public string DiaChi { get; set; }
+        public string TrangThai { get; set; }
+
+        public bool DangHoatDong
+        {
+            get { return string.IsNullOrWhiteSpace(TrangThai) || TrangThai == "Active"; }
+        }
+
+        public string TrangThaiHienThi
+        {
+            get { return DangHoatDong ? "Active" : "Unactive"; }
+        }
 
         public string HienThiCombo
         {

@@ -1,4 +1,5 @@
-using QuanLyTietKiemNganHang.Models;
+﻿using QuanLyTietKiemNganHang.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -8,10 +9,19 @@ namespace QuanLyTietKiemNganHang.Services
 {
     public class KhachHangService
     {
+        private static bool daKiemTraMigration;
+        private static readonly object syncRoot = new object();
+
+        public KhachHangService()
+        {
+            EnsureTrangThaiColumn();
+        }
+
         public List<KhachHang> GetAll()
         {
             var table = Db.ExecuteDataTable(
-                @"SELECT ma_khach_hang, so_cccd, ho_ten, so_dien_thoai, dia_chi
+                @"SELECT ma_khach_hang, so_cccd, ho_ten, so_dien_thoai, dia_chi,
+                         ISNULL(trang_thai, 'Active') AS trang_thai
                   FROM khach_hang
                   ORDER BY ma_khach_hang",
                 CommandType.Text);
@@ -28,13 +38,15 @@ namespace QuanLyTietKiemNganHang.Services
             }
 
             var table = Db.ExecuteDataTable(
-                @"SELECT ma_khach_hang, so_cccd, ho_ten, so_dien_thoai, dia_chi
+                @"SELECT ma_khach_hang, so_cccd, ho_ten, so_dien_thoai, dia_chi,
+                         ISNULL(trang_thai, 'Active') AS trang_thai
                   FROM khach_hang
                   WHERE ma_khach_hang LIKE @keyword
                      OR so_cccd LIKE @keyword
                      OR ho_ten LIKE @keyword
                      OR so_dien_thoai LIKE @keyword
                      OR dia_chi LIKE @keyword
+                     OR ISNULL(trang_thai, 'Active') LIKE @keyword
                   ORDER BY ma_khach_hang",
                 CommandType.Text,
                 new SqlParameter("@keyword", "%" + keyword + "%"));
@@ -42,13 +54,27 @@ namespace QuanLyTietKiemNganHang.Services
             return table.AsEnumerable().Select(Map).ToList();
         }
 
-        public bool ExistsMaKhachHang(string maKhachHang)
+
+        public bool CccdDaTonTai(string cccd, string maKhachHangBoQua = null)
         {
-            var result = Db.ExecuteScalar(
-                "SELECT COUNT(*) FROM khach_hang WHERE ma_khach_hang = @maKhachHang",
+            cccd = (cccd ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(cccd))
+            {
+                return false;
+            }
+
+            const string query = @"SELECT COUNT(1)
+FROM khach_hang
+WHERE so_cccd = @so_cccd
+  AND (@ma_khach_hang_bo_qua IS NULL OR ma_khach_hang <> @ma_khach_hang_bo_qua)";
+
+            var count = Convert.ToInt32(Db.ExecuteScalar(
+                query,
                 CommandType.Text,
-                new SqlParameter("@maKhachHang", maKhachHang));
-            return result != null && (int)result > 0;
+                new SqlParameter("@so_cccd", cccd),
+                new SqlParameter("@ma_khach_hang_bo_qua", string.IsNullOrWhiteSpace(maKhachHangBoQua) ? (object)DBNull.Value : maKhachHangBoQua)));
+
+            return count > 0;
         }
 
         public void Add(KhachHang model)
@@ -73,12 +99,13 @@ namespace QuanLyTietKiemNganHang.Services
                 new SqlParameter("@dia_chi", model.DiaChi));
         }
 
-        public void Delete(string maKhachHang)
+        public void CapNhatTrangThai(string maKhachHang, bool kichHoat)
         {
             Db.ExecuteNonQuery(
-                "sp_xoa_khach_hang",
+                "sp_cap_nhat_trang_thai_khach_hang",
                 CommandType.StoredProcedure,
-                new SqlParameter("@ma_khach_hang", maKhachHang));
+                new SqlParameter("@ma_khach_hang", maKhachHang),
+                new SqlParameter("@trang_thai", kichHoat ? "Active" : "Unactive"));
         }
 
         private static KhachHang Map(DataRow row)
@@ -89,8 +116,54 @@ namespace QuanLyTietKiemNganHang.Services
                 CCCD = row["so_cccd"].ToString(),
                 HoTen = row["ho_ten"].ToString(),
                 SoDienThoai = row["so_dien_thoai"].ToString(),
-                DiaChi = row["dia_chi"].ToString()
+                DiaChi = row["dia_chi"].ToString(),
+                TrangThai = row.Table.Columns.Contains("trang_thai") ? row["trang_thai"].ToString() : "Active"
             };
+        }
+
+        private static void EnsureTrangThaiColumn()
+        {
+            if (daKiemTraMigration)
+            {
+                return;
+            }
+
+            lock (syncRoot)
+            {
+                if (daKiemTraMigration)
+                {
+                    return;
+                }
+
+                Db.ExecuteNonQuery(@"
+IF COL_LENGTH('khach_hang', 'trang_thai') IS NULL
+BEGIN
+    ALTER TABLE khach_hang ADD trang_thai NVARCHAR(20) NOT NULL CONSTRAINT DF_khach_hang_trang_thai DEFAULT N'Active';
+    UPDATE khach_hang SET trang_thai = N'Active' WHERE trang_thai IS NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.check_constraints 
+    WHERE name = 'CK_khach_hang_trang_thai'
+)
+BEGIN
+    ALTER TABLE khach_hang WITH NOCHECK
+    ADD CONSTRAINT CK_khach_hang_trang_thai CHECK (trang_thai IN (N'Active', N'Unactive'));
+END;
+
+EXEC('CREATE OR ALTER PROC sp_cap_nhat_trang_thai_khach_hang
+    @ma_khach_hang VARCHAR(10),
+    @trang_thai NVARCHAR(20)
+AS
+BEGIN
+    UPDATE khach_hang
+    SET trang_thai = @trang_thai
+    WHERE ma_khach_hang = @ma_khach_hang;
+END;');
+", CommandType.Text);
+
+                daKiemTraMigration = true;
+            }
         }
     }
 }

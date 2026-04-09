@@ -1,3 +1,4 @@
+﻿using QuanLyTietKiemNganHang.Helpers;
 using QuanLyTietKiemNganHang.Models;
 using System.Collections.Generic;
 using System.Data;
@@ -72,7 +73,7 @@ namespace QuanLyTietKiemNganHang.Services
                 new SqlParameter("@ten_nhan_vien", model.TenNhanVien),
                 new SqlParameter("@tai_khoan", model.TaiKhoan),
                 new SqlParameter("@mat_khau", model.MatKhau),
-                new SqlParameter("@vai_tro", model.VaiTro));
+                new SqlParameter("@vai_tro", RoleHelper.NormalizeRole(model.VaiTro)));
         }
 
         public void Update(NhanVien model)
@@ -84,7 +85,7 @@ namespace QuanLyTietKiemNganHang.Services
                 new SqlParameter("@ma_nv", model.MaNhanVien),
                 new SqlParameter("@tai_khoan", model.TaiKhoan),
                 new SqlParameter("@mat_khau", model.MatKhau),
-                new SqlParameter("@vai_tro", model.VaiTro));
+                new SqlParameter("@vai_tro", RoleHelper.NormalizeRole(model.VaiTro)));
         }
 
         public void Delete(string maNhanVien)
@@ -103,7 +104,7 @@ namespace QuanLyTietKiemNganHang.Services
                 TenNhanVien = row["ten_nhan_vien"].ToString(),
                 TaiKhoan = row["tai_khoan"].ToString(),
                 MatKhau = row["mat_khau"].ToString(),
-                VaiTro = row["vai_tro"].ToString()
+                VaiTro = RoleHelper.NormalizeRole(row["vai_tro"].ToString())
             };
         }
     }

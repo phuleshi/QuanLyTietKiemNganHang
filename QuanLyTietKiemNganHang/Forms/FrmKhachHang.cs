@@ -1,4 +1,4 @@
-using QuanLyTietKiemNganHang.Helpers;
+﻿using QuanLyTietKiemNganHang.Helpers;
 using QuanLyTietKiemNganHang.Models;
 using QuanLyTietKiemNganHang.Services;
 using System;
@@ -12,16 +12,24 @@ namespace QuanLyTietKiemNganHang.Forms
     public partial class FrmKhachHang : Form
     {
         private readonly KhachHangService service = new KhachHangService();
+        private readonly NhanVien currentUser;
+        private List<KhachHang> currentItems = new List<KhachHang>();
         private string selectedMaKhachHang = string.Empty;
 
-        public FrmKhachHang()
+        public FrmKhachHang(NhanVien currentUser)
         {
+            this.currentUser = currentUser;
             InitializeComponent();
             ApplyTheme();
             BuildFields();
             WireEvents();
             LoadData();
             ResetForm(false);
+        }
+
+        private bool LaAdmin
+        {
+            get { return currentUser != null && currentUser.LaAdmin; }
         }
 
         private void ApplyTheme()
@@ -58,13 +66,15 @@ namespace QuanLyTietKiemNganHang.Forms
             StyleSecondaryButton(btnSua);
             StyleDangerButton(btnXoa);
             StyleSecondaryButton(btnMoi);
+
+            btnXoa.Visible = LaAdmin;
+            btnXoa.Text = "Đổi trạng thái";
         }
 
         private void BuildFields()
         {
             fieldsPanel.SuspendLayout();
             fieldsPanel.Controls.Clear();
-            fieldsPanel.Controls.Add(CreateInputGroup("Mã khách hàng", txtMa));
             fieldsPanel.Controls.Add(CreateInputGroup("Họ tên", txtHoTen));
             fieldsPanel.Controls.Add(CreateInputGroup("CCCD", txtCCCD));
             fieldsPanel.Controls.Add(CreateInputGroup("Số điện thoại", txtSDT));
@@ -97,7 +107,7 @@ namespace QuanLyTietKiemNganHang.Forms
             grid.CellClick += Grid_CellClick;
             btnThem.Click += (s, e) => Save(false);
             btnSua.Click += (s, e) => Save(true);
-            btnXoa.Click += BtnXoa_Click;
+            btnXoa.Click += BtnTrangThai_Click;
             btnMoi.Click += (s, e) => ResetForm();
         }
 
@@ -147,14 +157,16 @@ namespace QuanLyTietKiemNganHang.Forms
 
         private void BindGrid(List<KhachHang> data)
         {
+            currentItems = data ?? new List<KhachHang>();
             grid.DataSource = null;
-            grid.DataSource = data.Select(x => new
+            grid.DataSource = currentItems.Select(x => new
             {
                 x.MaKhachHang,
                 x.HoTen,
                 x.CCCD,
                 x.SoDienThoai,
-                x.DiaChi
+                x.DiaChi,
+                TrangThai = x.TrangThaiHienThi
             }).ToList();
 
             if (grid.Columns["MaKhachHang"] != null) grid.Columns["MaKhachHang"].HeaderText = "Mã KH";
@@ -162,6 +174,7 @@ namespace QuanLyTietKiemNganHang.Forms
             if (grid.Columns["CCCD"] != null) grid.Columns["CCCD"].HeaderText = "CCCD";
             if (grid.Columns["SoDienThoai"] != null) grid.Columns["SoDienThoai"].HeaderText = "SĐT";
             if (grid.Columns["DiaChi"] != null) grid.Columns["DiaChi"].HeaderText = "Địa chỉ";
+            if (grid.Columns["TrangThai"] != null) grid.Columns["TrangThai"].HeaderText = "Trạng thái";
         }
 
         private void Grid_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -170,7 +183,7 @@ namespace QuanLyTietKiemNganHang.Forms
 
             var value = grid.Rows[e.RowIndex].Cells["MaKhachHang"].Value;
             var maKhachHang = value != null ? value.ToString() : string.Empty;
-            var model = service.GetAll().FirstOrDefault(x => x.MaKhachHang == maKhachHang);
+            var model = currentItems.FirstOrDefault(x => x.MaKhachHang == maKhachHang);
             if (model == null) return;
 
             selectedMaKhachHang = model.MaKhachHang;
@@ -179,7 +192,8 @@ namespace QuanLyTietKiemNganHang.Forms
             txtCCCD.Text = model.CCCD;
             txtSDT.Text = model.SoDienThoai;
             txtDiaChi.Text = model.DiaChi;
-            lblSelected.Text = "Đang chọn: " + model.MaKhachHang + " - " + model.HoTen;
+            lblSelected.Text = "Đang chọn: " + model.MaKhachHang + " - " + model.HoTen + " (" + model.TrangThaiHienThi + ")";
+            UpdateTrangThaiButton(model);
         }
 
         private void Save(bool isUpdate)
@@ -198,6 +212,14 @@ namespace QuanLyTietKiemNganHang.Forms
                 return;
             }
 
+            if (service.CccdDaTonTai(cccd, isUpdate ? selectedMaKhachHang : null))
+            {
+                MessageBox.Show("CCCD đã tồn tại. Vui lòng nhập CCCD khác.", "Trùng CCCD", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtCCCD.Focus();
+                txtCCCD.SelectAll();
+                return;
+            }
+
             var model = new KhachHang
             {
                 MaKhachHang = selectedMaKhachHang,
@@ -207,38 +229,81 @@ namespace QuanLyTietKiemNganHang.Forms
                 DiaChi = txtDiaChi.Text.Trim()
             };
 
-            if (isUpdate)
+            try
             {
-                service.Update(model);
-                MessageBox.Show("Cập nhật khách hàng thành công.");
-            }
-            else
-            {
-                service.Add(model);
-                MessageBox.Show("Thêm khách hàng thành công.");
-            }
+                if (isUpdate)
+                {
+                    service.Update(model);
+                    MessageBox.Show("Cập nhật khách hàng thành công.");
+                }
+                else
+                {
+                    service.Add(model);
+                    MessageBox.Show("Thêm khách hàng thành công.");
+                }
 
-            LoadData();
-            ResetForm();
+                LoadData();
+                ResetForm();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
+                {
+                    MessageBox.Show("CCCD đã tồn tại. Vui lòng nhập CCCD khác.", "Trùng CCCD", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtCCCD.Focus();
+                    txtCCCD.SelectAll();
+                    return;
+                }
+
+                throw;
+            }
         }
 
-        private void BtnXoa_Click(object sender, EventArgs e)
+        private void BtnTrangThai_Click(object sender, EventArgs e)
         {
+            if (!LaAdmin)
+            {
+                MessageBox.Show("Chỉ admin mới có thể đổi trạng thái khách hàng.", "Không có quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(selectedMaKhachHang))
             {
-                MessageBox.Show("Vui lòng chọn khách hàng cần xóa.");
+                MessageBox.Show("Vui lòng chọn khách hàng cần đổi trạng thái.");
                 return;
             }
 
-            if (MessageBox.Show("Bạn có chắc muốn xóa khách hàng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            var model = currentItems.FirstOrDefault(x => x.MaKhachHang == selectedMaKhachHang);
+            if (model == null)
+            {
+                MessageBox.Show("Không tìm thấy khách hàng đã chọn.");
+                return;
+            }
+
+            var trangThaiMoi = model.DangHoatDong ? "Unactive" : "Active";
+            var thongDiep = model.DangHoatDong
+                ? "Bạn có chắc muốn chuyển khách hàng này sang Unactive?"
+                : "Bạn có chắc muốn kích hoạt lại khách hàng này?";
+
+            if (MessageBox.Show(thongDiep, "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
             {
                 return;
             }
 
-            service.Delete(selectedMaKhachHang);
+            service.CapNhatTrangThai(selectedMaKhachHang, !model.DangHoatDong);
             LoadData();
             ResetForm();
-            MessageBox.Show("Xóa khách hàng thành công.");
+            MessageBox.Show("Đã cập nhật trạng thái khách hàng sang " + trangThaiMoi + ".");
+        }
+
+        private void UpdateTrangThaiButton(KhachHang model)
+        {
+            if (!LaAdmin || model == null)
+            {
+                return;
+            }
+
+            btnXoa.Text = model.DangHoatDong ? "Chuyển Unactive" : "Chuyển Active";
         }
 
         private void ResetForm(bool reloadGrid = true)
@@ -250,6 +315,10 @@ namespace QuanLyTietKiemNganHang.Forms
             txtCCCD.Clear();
             txtDiaChi.Clear();
             lblSelected.Text = "Chưa chọn khách hàng nào.";
+            if (LaAdmin)
+            {
+                btnXoa.Text = "Đổi trạng thái";
+            }
 
             if (reloadGrid)
             {

@@ -12,16 +12,28 @@ namespace QuanLyTietKiemNganHang.Forms
     public partial class FrmNhanVien : Form
     {
         private readonly NhanVienService service = new NhanVienService();
+        private readonly NhanVien currentUser;
         private string selectedMaNhanVien = string.Empty;
 
-        public FrmNhanVien()
+        public FrmNhanVien(NhanVien currentUser)
         {
+            this.currentUser = currentUser;
             InitializeComponent();
             ApplyTheme();
             BuildFields();
             WireEvents();
+            EnsureAuthorization();
             LoadData();
             ResetForm(false);
+        }
+
+        private void EnsureAuthorization()
+        {
+            if (currentUser == null || !currentUser.LaAdmin)
+            {
+                MessageBox.Show("Chỉ admin mới có chức năng quản lý nhân viên.", "Không có quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+            }
         }
 
         private void ApplyTheme()
@@ -64,11 +76,10 @@ namespace QuanLyTietKiemNganHang.Forms
         private void BuildFields()
         {
             cboTrangThai.Items.Clear();
-            cboTrangThai.Items.AddRange(new object[] { "Admin", "Giao_dich_vien" });
+            cboTrangThai.Items.AddRange(new object[] { "Admin", "Nhân viên" });
 
             fieldsPanel.SuspendLayout();
             fieldsPanel.Controls.Clear();
-            fieldsPanel.Controls.Add(CreateInputGroup("Mã nhân viên", txtMa));
             fieldsPanel.Controls.Add(CreateInputGroup("Tên nhân viên", txtHoTen));
             fieldsPanel.Controls.Add(CreateInputGroup("Tài khoản", txtEmail));
             fieldsPanel.Controls.Add(CreateInputGroup("Mật khẩu", txtSDT));
@@ -166,7 +177,7 @@ namespace QuanLyTietKiemNganHang.Forms
                 x.TenNhanVien,
                 x.TaiKhoan,
                 MatKhau = new string('*', string.IsNullOrEmpty(x.MatKhau) ? 0 : x.MatKhau.Length),
-                x.VaiTro
+                VaiTro = x.VaiTroHienThi
             }).ToList();
 
             if (grid.Columns["MaNhanVien"] != null) grid.Columns["MaNhanVien"].HeaderText = "Mã NV";
@@ -190,7 +201,7 @@ namespace QuanLyTietKiemNganHang.Forms
             txtHoTen.Text = model.TenNhanVien;
             txtEmail.Text = model.TaiKhoan;
             txtSDT.Text = model.MatKhau;
-            cboTrangThai.Text = model.VaiTro;
+            cboTrangThai.Text = model.VaiTroHienThi;
             lblSelected.Text = "Đang chọn: " + model.MaNhanVien + " - " + model.TenNhanVien;
         }
 
@@ -199,7 +210,7 @@ namespace QuanLyTietKiemNganHang.Forms
             var tenNhanVien = txtHoTen.Text.Trim();
             var taiKhoan = txtEmail.Text.Trim();
             var matKhau = txtSDT.Text.Trim();
-            var vaiTro = cboTrangThai.Text.Trim();
+            var vaiTro = ConvertRoleToDb(cboTrangThai.Text.Trim());
             var errors = new List<string>();
 
             if (!FormValidator.Required(tenNhanVien)) errors.Add("- Tên nhân viên không được để trống");
@@ -271,7 +282,7 @@ namespace QuanLyTietKiemNganHang.Forms
             txtHoTen.Clear();
             txtEmail.Clear();
             txtSDT.Clear();
-            cboTrangThai.SelectedIndex = cboTrangThai.Items.Count > 0 ? 0 : -1;
+            cboTrangThai.SelectedIndex = cboTrangThai.Items.Count > 0 ? 1 : -1;
             lblSelected.Text = "Chưa chọn nhân viên nào.";
 
             if (reloadGrid)
@@ -279,6 +290,16 @@ namespace QuanLyTietKiemNganHang.Forms
                 txtSearch.Clear();
                 LoadData();
             }
+        }
+
+        private static string ConvertRoleToDb(string vaiTroHienThi)
+        {
+            if (string.Equals(vaiTroHienThi, "Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return RoleHelper.Admin;
+            }
+
+            return RoleHelper.NhanVienDb;
         }
     }
 }

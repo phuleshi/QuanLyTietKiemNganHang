@@ -1,4 +1,4 @@
-namespace QuanLyTietKiemNganHang.Forms
+﻿namespace QuanLyTietKiemNganHang.Forms
 {
     partial class FrmDashboard
     {
@@ -19,6 +19,7 @@ namespace QuanLyTietKiemNganHang.Forms
         private System.Windows.Forms.Button btnTatToan;
         private System.Windows.Forms.Button btnLichSu;
         private System.Windows.Forms.Panel contentPanel;
+        private System.Windows.Forms.FlowLayoutPanel menuButtonsPanel;
         private System.Windows.Forms.TableLayoutPanel cardsPanel;
         private System.Windows.Forms.Panel announceCard;
         private System.Windows.Forms.Label lblAnnTitle;
@@ -48,6 +49,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.lblApp = new System.Windows.Forms.Label();
             this.lblMenu = new System.Windows.Forms.Label();
             this.contentPanel = new System.Windows.Forms.Panel();
+            this.menuButtonsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.announceCard = new System.Windows.Forms.Panel();
             this.lblThongBao = new System.Windows.Forms.Label();
             this.lblAnnTitle = new System.Windows.Forms.Label();
@@ -100,14 +102,15 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             // sidebar
             // 
-            this.sidebar.Controls.Add(this.btnLichSu);
-            this.sidebar.Controls.Add(this.btnTatToan);
-            this.sidebar.Controls.Add(this.btnLoaiTietKiem);
-            this.sidebar.Controls.Add(this.btnGiaoDich);
-            this.sidebar.Controls.Add(this.btnDanhSachSo);
-            this.sidebar.Controls.Add(this.btnMoSo);
-            this.sidebar.Controls.Add(this.btnNhanVien);
-            this.sidebar.Controls.Add(this.btnKhachHang);
+            this.menuButtonsPanel.Controls.Add(this.btnKhachHang);
+            this.menuButtonsPanel.Controls.Add(this.btnNhanVien);
+            this.menuButtonsPanel.Controls.Add(this.btnMoSo);
+            this.menuButtonsPanel.Controls.Add(this.btnDanhSachSo);
+            this.menuButtonsPanel.Controls.Add(this.btnGiaoDich);
+            this.menuButtonsPanel.Controls.Add(this.btnLoaiTietKiem);
+            this.menuButtonsPanel.Controls.Add(this.btnTatToan);
+            this.menuButtonsPanel.Controls.Add(this.btnLichSu);
+            this.sidebar.Controls.Add(this.menuButtonsPanel);
             this.sidebar.Controls.Add(this.lblApp);
             this.sidebar.Controls.Add(this.lblMenu);
             this.sidebar.Dock = System.Windows.Forms.DockStyle.Left;
@@ -116,6 +119,18 @@ namespace QuanLyTietKiemNganHang.Forms
             this.sidebar.Padding = new System.Windows.Forms.Padding(20, 24, 20, 24);
             this.sidebar.Size = new System.Drawing.Size(230, 657);
             this.sidebar.TabIndex = 1;
+            // 
+            // menuButtonsPanel
+            // 
+            this.menuButtonsPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.menuButtonsPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.menuButtonsPanel.Location = new System.Drawing.Point(20, 74);
+            this.menuButtonsPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.menuButtonsPanel.Name = "menuButtonsPanel";
+            this.menuButtonsPanel.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
+            this.menuButtonsPanel.Size = new System.Drawing.Size(190, 520);
+            this.menuButtonsPanel.TabIndex = 2;
+            this.menuButtonsPanel.WrapContents = false;
             // 
             // btnLichSu
             // 

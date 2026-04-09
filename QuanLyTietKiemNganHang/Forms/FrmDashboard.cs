@@ -1,4 +1,4 @@
-using QuanLyTietKiemNganHang.Helpers;
+﻿using QuanLyTietKiemNganHang.Helpers;
 using QuanLyTietKiemNganHang.Models;
 using QuanLyTietKiemNganHang.Services;
 using System.Drawing;
@@ -16,6 +16,8 @@ namespace QuanLyTietKiemNganHang.Forms
             this.currentUser = currentUser;
             InitializeComponent();
             ApplyTheme();
+            ApplyAuthorization();
+            NormalizeSidebarLayout();
             WireEvents();
             try
             {
@@ -42,7 +44,7 @@ namespace QuanLyTietKiemNganHang.Forms
             lblUser.ForeColor = ControlFactory.MutedTextColor;
 
             var tenNhanVien = string.IsNullOrWhiteSpace(currentUser.TenNhanVien) ? currentUser.TaiKhoan : currentUser.TenNhanVien;
-            lblUser.Text = "Xin chào, " + tenNhanVien + " (" + currentUser.MaNhanVien + " - " + currentUser.VaiTro + ")";
+            lblUser.Text = "Xin chào, " + tenNhanVien + " (" + currentUser.MaNhanVien + " - " + currentUser.VaiTroHienThi + ")";
 
             lblMenu.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             lblMenu.ForeColor = Color.FromArgb(191, 219, 254);
@@ -64,17 +66,61 @@ namespace QuanLyTietKiemNganHang.Forms
             StyleSidebarButton(btnLichSu);
         }
 
+        private void ApplyAuthorization()
+        {
+            var laAdmin = currentUser != null && currentUser.LaAdmin;
+            btnNhanVien.Visible = laAdmin;
+            btnLoaiTietKiem.Visible = laAdmin;
+            btnLichSu.Visible = laAdmin;
+        }
+
+        private void NormalizeSidebarLayout()
+        {
+            foreach (Control control in menuButtonsPanel.Controls)
+            {
+                if (control is Button button)
+                {
+                    button.Width = 188;
+                    button.Margin = new Padding(0, 0, 0, 10);
+                }
+            }
+        }
+
         private void WireEvents()
         {
             btnLogout.Click += (s, e) => Close();
-            btnKhachHang.Click += (s, e) => new FrmKhachHang().ShowDialog();
-            btnNhanVien.Click += (s, e) => new FrmNhanVien().ShowDialog();
+            btnKhachHang.Click += (s, e) => new FrmKhachHang(currentUser).ShowDialog();
+            btnNhanVien.Click += (s, e) =>
+            {
+                if (!currentUser.LaAdmin)
+                {
+                    MessageBox.Show("Chỉ admin mới có chức năng quản lý nhân viên.", "Không có quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                new FrmNhanVien(currentUser).ShowDialog();
+            };
             btnMoSo.Click += (s, e) => new FrmMoSo(currentUser).ShowDialog();
             btnDanhSachSo.Click += (s, e) => new FrmDanhSachSo(currentUser).ShowDialog();
             btnGiaoDich.Click += (s, e) => new FrmGiaoDich().ShowDialog();
-            btnLoaiTietKiem.Click += (s, e) => new FrmLoaiTietKiem().ShowDialog();
+            btnLoaiTietKiem.Click += (s, e) =>
+            {
+                if (!currentUser.LaAdmin)
+                {
+                    MessageBox.Show("Chỉ admin mới có chức năng quản lý gói tiết kiệm.", "Không có quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                new FrmLoaiTietKiem(currentUser).ShowDialog();
+            };
             btnTatToan.Click += (s, e) => new FrmTatToan(currentUser, null).ShowDialog();
-            btnLichSu.Click += (s, e) => new FrmLichSuHoatDong().ShowDialog();
+            btnLichSu.Click += (s, e) =>
+            {
+                if (!currentUser.LaAdmin)
+                {
+                    MessageBox.Show("Chỉ admin mới có quyền xem lịch sử hoạt động.", "Không có quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                new FrmLichSuHoatDong(currentUser).ShowDialog();
+            };
             topPanel.Resize += (s, e) => btnLogout.Left = topPanel.Width - btnLogout.Width - 24;
         }
 

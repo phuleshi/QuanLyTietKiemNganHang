@@ -1,4 +1,4 @@
-namespace QuanLyTietKiemNganHang.Forms
+﻿namespace QuanLyTietKiemNganHang.Forms
 {
     partial class FrmNhanVien
     {
@@ -122,9 +122,10 @@ namespace QuanLyTietKiemNganHang.Forms
             this.actionPanel.Controls.Add(this.btnXoa);
             this.actionPanel.Controls.Add(this.btnSua);
             this.actionPanel.Controls.Add(this.btnThem);
-            this.actionPanel.Location = new System.Drawing.Point(20, 565);
+            this.actionPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.actionPanel.Location = new System.Drawing.Point(20, 513);
             this.actionPanel.Name = "actionPanel";
-            this.actionPanel.Size = new System.Drawing.Size(304, 96);
+            this.actionPanel.Size = new System.Drawing.Size(302, 96);
             this.actionPanel.TabIndex = 3;
             // 
             // btnMoi
@@ -165,11 +166,14 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             // fieldsPanel
             // 
+            this.fieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fieldsPanel.AutoScroll = true;
             this.fieldsPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.fieldsPanel.Location = new System.Drawing.Point(20, 82);
             this.fieldsPanel.Name = "fieldsPanel";
-            this.fieldsPanel.Size = new System.Drawing.Size(304, 465);
+            this.fieldsPanel.Size = new System.Drawing.Size(304, 421);
             this.fieldsPanel.TabIndex = 2;
             this.fieldsPanel.WrapContents = false;
             // 

@@ -12,15 +12,27 @@ namespace QuanLyTietKiemNganHang.Forms
     public partial class FrmLoaiTietKiem : Form
     {
         private readonly XuLyLoaiTietKiem service = new XuLyLoaiTietKiem();
+        private readonly NhanVien currentUser;
         private List<LoaiTietKiem> items = new List<LoaiTietKiem>();
         private string selectedMaGoi = string.Empty;
 
-        public FrmLoaiTietKiem()
+        public FrmLoaiTietKiem(NhanVien currentUser)
         {
+            this.currentUser = currentUser;
             InitializeComponent();
             ApplyTheme();
             WireEvents();
+            EnsureAuthorization();
             LoadData();
+        }
+
+        private void EnsureAuthorization()
+        {
+            if (currentUser == null || !currentUser.LaAdmin)
+            {
+                MessageBox.Show("Chỉ admin mới có chức năng quản lý gói tiết kiệm.", "Không có quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+            }
         }
 
         private void ApplyTheme()
@@ -178,10 +190,10 @@ namespace QuanLyTietKiemNganHang.Forms
                 MessageBox.Show("Không thể xóa gói: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void FrmLoaiTietKiem_Load(object sender, EventArgs e)
         {
 
         }
+
     }
 }
