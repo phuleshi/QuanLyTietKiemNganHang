@@ -153,6 +153,9 @@
     <EmbeddedResource Include="Forms\FrmLoaiTietKiem.resx">
       <DependentUpon>FrmLoaiTietKiem.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmMoSo.resx">
+      <DependentUpon>FrmMoSo.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

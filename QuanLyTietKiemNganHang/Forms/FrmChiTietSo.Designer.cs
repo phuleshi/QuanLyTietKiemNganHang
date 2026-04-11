@@ -64,26 +64,29 @@ namespace QuanLyTietKiemNganHang.Forms
             this.topPanel.Controls.Add(this.lblTitle);
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
+            this.topPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Padding = new System.Windows.Forms.Padding(24, 18, 24, 18);
-            this.topPanel.Size = new System.Drawing.Size(900, 92);
+            this.topPanel.Padding = new System.Windows.Forms.Padding(32, 22, 32, 22);
+            this.topPanel.Size = new System.Drawing.Size(1200, 113);
             this.topPanel.TabIndex = 0;
             // 
             // lblSubTitle
             // 
             this.lblSubTitle.AutoSize = true;
-            this.lblSubTitle.Location = new System.Drawing.Point(27, 52);
+            this.lblSubTitle.Location = new System.Drawing.Point(36, 64);
+            this.lblSubTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSubTitle.Name = "lblSubTitle";
-            this.lblSubTitle.Size = new System.Drawing.Size(58, 15);
+            this.lblSubTitle.Size = new System.Drawing.Size(62, 16);
             this.lblSubTitle.TabIndex = 1;
             this.lblSubTitle.Text = "Thông tin";
             // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(24, 18);
+            this.lblTitle.Location = new System.Drawing.Point(32, 22);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(109, 15);
+            this.lblTitle.Size = new System.Drawing.Size(116, 16);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Chi tiết sổ tiết kiệm";
             // 
@@ -92,10 +95,11 @@ namespace QuanLyTietKiemNganHang.Forms
             this.contentCard.Controls.Add(this.detailsTable);
             this.contentCard.Controls.Add(this.bottomPanel);
             this.contentCard.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentCard.Location = new System.Drawing.Point(0, 92);
+            this.contentCard.Location = new System.Drawing.Point(0, 113);
+            this.contentCard.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.contentCard.Name = "contentCard";
-            this.contentCard.Padding = new System.Windows.Forms.Padding(24);
-            this.contentCard.Size = new System.Drawing.Size(900, 528);
+            this.contentCard.Padding = new System.Windows.Forms.Padding(32, 30, 32, 30);
+            this.contentCard.Size = new System.Drawing.Size(1200, 650);
             this.contentCard.TabIndex = 1;
             // 
             // detailsTable
@@ -114,105 +118,116 @@ namespace QuanLyTietKiemNganHang.Forms
             this.detailsTable.Controls.Add(this.numSoDu, 0, 4);
             this.detailsTable.Controls.Add(this.cboTrangThai, 1, 4);
             this.detailsTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.detailsTable.Location = new System.Drawing.Point(24, 24);
+            this.detailsTable.Location = new System.Drawing.Point(32, 30);
+            this.detailsTable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.detailsTable.Name = "detailsTable";
-            this.detailsTable.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.detailsTable.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.detailsTable.RowCount = 5;
-            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-            this.detailsTable.Size = new System.Drawing.Size(852, 416);
+            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 101F));
+            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 101F));
+            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 101F));
+            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 101F));
+            this.detailsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 101F));
+            this.detailsTable.Size = new System.Drawing.Size(1136, 511);
             this.detailsTable.TabIndex = 0;
             // 
             // txtMaSo
             // 
             this.txtMaSo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtMaSo.Location = new System.Drawing.Point(3, 11);
+            this.txtMaSo.Location = new System.Drawing.Point(4, 14);
+            this.txtMaSo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtMaSo.Multiline = true;
             this.txtMaSo.Name = "txtMaSo";
-            this.txtMaSo.Size = new System.Drawing.Size(420, 76);
+            this.txtMaSo.Size = new System.Drawing.Size(560, 93);
             this.txtMaSo.TabIndex = 0;
             // 
             // txtChuSoHuu
             // 
             this.txtChuSoHuu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtChuSoHuu.Location = new System.Drawing.Point(429, 11);
+            this.txtChuSoHuu.Location = new System.Drawing.Point(572, 14);
+            this.txtChuSoHuu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtChuSoHuu.Multiline = true;
             this.txtChuSoHuu.Name = "txtChuSoHuu";
-            this.txtChuSoHuu.Size = new System.Drawing.Size(420, 76);
+            this.txtChuSoHuu.Size = new System.Drawing.Size(560, 93);
             this.txtChuSoHuu.TabIndex = 1;
             // 
             // txtGoiTietKiem
             // 
             this.txtGoiTietKiem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtGoiTietKiem.Location = new System.Drawing.Point(3, 93);
+            this.txtGoiTietKiem.Location = new System.Drawing.Point(4, 115);
+            this.txtGoiTietKiem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtGoiTietKiem.Multiline = true;
             this.txtGoiTietKiem.Name = "txtGoiTietKiem";
-            this.txtGoiTietKiem.Size = new System.Drawing.Size(420, 76);
+            this.txtGoiTietKiem.Size = new System.Drawing.Size(560, 93);
             this.txtGoiTietKiem.TabIndex = 2;
             // 
             // txtSoTienGui
             // 
             this.txtSoTienGui.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSoTienGui.Location = new System.Drawing.Point(429, 93);
+            this.txtSoTienGui.Location = new System.Drawing.Point(572, 115);
+            this.txtSoTienGui.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSoTienGui.Multiline = true;
             this.txtSoTienGui.Name = "txtSoTienGui";
-            this.txtSoTienGui.Size = new System.Drawing.Size(420, 76);
+            this.txtSoTienGui.Size = new System.Drawing.Size(560, 93);
             this.txtSoTienGui.TabIndex = 3;
             // 
             // txtLaiSuat
             // 
             this.txtLaiSuat.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtLaiSuat.Location = new System.Drawing.Point(3, 175);
+            this.txtLaiSuat.Location = new System.Drawing.Point(4, 216);
+            this.txtLaiSuat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtLaiSuat.Multiline = true;
             this.txtLaiSuat.Name = "txtLaiSuat";
-            this.txtLaiSuat.Size = new System.Drawing.Size(420, 76);
+            this.txtLaiSuat.Size = new System.Drawing.Size(560, 93);
             this.txtLaiSuat.TabIndex = 4;
             // 
             // txtNgayMo
             // 
             this.txtNgayMo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNgayMo.Location = new System.Drawing.Point(429, 175);
+            this.txtNgayMo.Location = new System.Drawing.Point(572, 216);
+            this.txtNgayMo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtNgayMo.Multiline = true;
             this.txtNgayMo.Name = "txtNgayMo";
-            this.txtNgayMo.Size = new System.Drawing.Size(420, 76);
+            this.txtNgayMo.Size = new System.Drawing.Size(560, 93);
             this.txtNgayMo.TabIndex = 5;
             // 
             // txtNgayDaoHan
             // 
             this.txtNgayDaoHan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNgayDaoHan.Location = new System.Drawing.Point(3, 257);
+            this.txtNgayDaoHan.Location = new System.Drawing.Point(4, 317);
+            this.txtNgayDaoHan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtNgayDaoHan.Multiline = true;
             this.txtNgayDaoHan.Name = "txtNgayDaoHan";
-            this.txtNgayDaoHan.Size = new System.Drawing.Size(420, 76);
+            this.txtNgayDaoHan.Size = new System.Drawing.Size(560, 93);
             this.txtNgayDaoHan.TabIndex = 6;
             // 
             // txtNhanVienMo
             // 
             this.txtNhanVienMo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNhanVienMo.Location = new System.Drawing.Point(429, 257);
+            this.txtNhanVienMo.Location = new System.Drawing.Point(572, 317);
+            this.txtNhanVienMo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtNhanVienMo.Multiline = true;
             this.txtNhanVienMo.Name = "txtNhanVienMo";
-            this.txtNhanVienMo.Size = new System.Drawing.Size(420, 76);
+            this.txtNhanVienMo.Size = new System.Drawing.Size(560, 93);
             this.txtNhanVienMo.TabIndex = 7;
             // 
             // numSoDu
             // 
             this.numSoDu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numSoDu.Location = new System.Drawing.Point(3, 339);
+            this.numSoDu.Location = new System.Drawing.Point(4, 418);
+            this.numSoDu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numSoDu.Name = "numSoDu";
-            this.numSoDu.Size = new System.Drawing.Size(420, 20);
+            this.numSoDu.Size = new System.Drawing.Size(560, 22);
             this.numSoDu.TabIndex = 8;
             // 
             // cboTrangThai
             // 
             this.cboTrangThai.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboTrangThai.FormattingEnabled = true;
-            this.cboTrangThai.Location = new System.Drawing.Point(429, 339);
+            this.cboTrangThai.Location = new System.Drawing.Point(572, 418);
+            this.cboTrangThai.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboTrangThai.Name = "cboTrangThai";
-            this.cboTrangThai.Size = new System.Drawing.Size(420, 21);
+            this.cboTrangThai.Size = new System.Drawing.Size(560, 24);
             this.cboTrangThai.TabIndex = 9;
             // 
             // bottomPanel
@@ -220,18 +235,20 @@ namespace QuanLyTietKiemNganHang.Forms
             this.bottomPanel.Controls.Add(this.btnDong);
             this.bottomPanel.Controls.Add(this.btnLuu);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bottomPanel.Location = new System.Drawing.Point(24, 440);
+            this.bottomPanel.Location = new System.Drawing.Point(32, 541);
+            this.bottomPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(852, 64);
+            this.bottomPanel.Size = new System.Drawing.Size(1136, 79);
             this.bottomPanel.TabIndex = 1;
             // 
             // btnDong
             // 
             this.btnDong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDong.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnDong.Location = new System.Drawing.Point(718, 12);
+            this.btnDong.Location = new System.Drawing.Point(957, 15);
+            this.btnDong.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnDong.Name = "btnDong";
-            this.btnDong.Size = new System.Drawing.Size(120, 40);
+            this.btnDong.Size = new System.Drawing.Size(160, 49);
             this.btnDong.TabIndex = 1;
             this.btnDong.Text = "Đóng";
             this.btnDong.UseVisualStyleBackColor = true;
@@ -239,9 +256,10 @@ namespace QuanLyTietKiemNganHang.Forms
             // btnLuu
             // 
             this.btnLuu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLuu.Location = new System.Drawing.Point(582, 12);
+            this.btnLuu.Location = new System.Drawing.Point(776, 15);
+            this.btnLuu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLuu.Name = "btnLuu";
-            this.btnLuu.Size = new System.Drawing.Size(120, 40);
+            this.btnLuu.Size = new System.Drawing.Size(160, 49);
             this.btnLuu.TabIndex = 0;
             this.btnLuu.Text = "Lưu thay đổi";
             this.btnLuu.UseVisualStyleBackColor = true;
@@ -250,13 +268,14 @@ namespace QuanLyTietKiemNganHang.Forms
             // FrmChiTietSo
             // 
             this.AcceptButton = this.btnLuu;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnDong;
-            this.ClientSize = new System.Drawing.Size(900, 620);
+            this.ClientSize = new System.Drawing.Size(1200, 763);
             this.Controls.Add(this.contentCard);
             this.Controls.Add(this.topPanel);
-            this.MinimumSize = new System.Drawing.Size(880, 620);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(1167, 752);
             this.Name = "FrmChiTietSo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Chi tiết sổ tiết kiệm";

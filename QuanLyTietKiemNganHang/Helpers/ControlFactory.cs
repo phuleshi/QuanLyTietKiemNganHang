@@ -230,5 +230,25 @@ namespace QuanLyTietKiemNganHang.Helpers
             panel.Controls.Add(input);
             return panel;
         }
+        private static Panel CreateField(string label, Control input)
+        {
+            Panel p = new Panel();
+            p.Width = 400;
+            p.Height = 60;
+            p.Margin = new Padding(0, 0, 0, 10);
+
+            Label lbl = new Label();
+            lbl.Text = label;
+            lbl.Dock = DockStyle.Top;
+            lbl.Height = 20;
+
+            input.Dock = DockStyle.Bottom;
+            input.Height = 30;
+
+            p.Controls.Add(input);
+            p.Controls.Add(lbl);
+
+            return p;
+        }
     }
 }
