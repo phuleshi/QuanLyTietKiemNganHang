@@ -233,12 +233,12 @@ namespace QuanLyTietKiemNganHang.Forms
             {
                 if (isUpdate)
                 {
-                    service.Update(model);
+                    service.Update(model, currentUser != null ? currentUser.MaNhanVien : null);
                     MessageBox.Show("Cập nhật khách hàng thành công.");
                 }
                 else
                 {
-                    service.Add(model);
+                    service.Add(model, currentUser != null ? currentUser.MaNhanVien : null);
                     MessageBox.Show("Thêm khách hàng thành công.");
                 }
 
@@ -290,7 +290,7 @@ namespace QuanLyTietKiemNganHang.Forms
                 return;
             }
 
-            service.CapNhatTrangThai(selectedMaKhachHang, !model.DangHoatDong);
+            service.CapNhatTrangThai(selectedMaKhachHang, !model.DangHoatDong, currentUser != null ? currentUser.MaNhanVien : null);
             LoadData();
             ResetForm();
             MessageBox.Show("Đã cập nhật trạng thái khách hàng sang " + trangThaiMoi + ".");

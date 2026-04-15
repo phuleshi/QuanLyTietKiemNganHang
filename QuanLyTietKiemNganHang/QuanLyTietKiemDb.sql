@@ -364,3 +364,18 @@ BEGIN
     WHERE ma_nhat_ky = @ma_nhat_ky;
 END;    
 GO
+
+CREATE OR ALTER PROC sp_cap_nhat_lai
+AS
+BEGIN
+    UPDATE so_tiet_kiem
+    SET so_du_hien_tai = so_du_hien_tai + 
+        (so_du_hien_tai * lai_suat_chot / 100.0 / 365) * 
+        DATEDIFF(DAY, ngay_mo, GETDATE()),
+        
+        ngay_mo = GETDATE() -- reset lại để lần sau tính tiếp
+    WHERE trang_thai = N'Dang_mo';
+END;
+GO
+EXEC sp_cap_nhat_lai;
+SELECT * FROM so_tiet_kiem;

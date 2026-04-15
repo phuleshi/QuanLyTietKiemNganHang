@@ -19,7 +19,7 @@ namespace QuanLyTietKiemNganHang.Forms
             InitializeComponent();
             ApplyTheme();
             WireEvents();
-            dtFrom.Value = DateTime.Today.AddMonths(-1);
+            dtFrom.Value = DateTime.Today.AddDays(-7);
             dtTo.Value = DateTime.Today;
             cboLoai.Items.AddRange(new object[] { "Tất cả", "Rut_tien", "Gui_them", "Tra_lai" });
             cboLoai.SelectedIndex = 0;

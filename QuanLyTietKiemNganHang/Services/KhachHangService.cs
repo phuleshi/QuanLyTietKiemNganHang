@@ -11,6 +11,7 @@ namespace QuanLyTietKiemNganHang.Services
     {
         private static bool daKiemTraMigration;
         private static readonly object syncRoot = new object();
+        private readonly NhatKyHeThongService nhatKyService = new NhatKyHeThongService();
 
         public KhachHangService()
         {
@@ -77,7 +78,7 @@ WHERE so_cccd = @so_cccd
             return count > 0;
         }
 
-        public void Add(KhachHang model)
+        public void Add(KhachHang model, string maNhanVien = null)
         {
             Db.ExecuteNonQuery(
                 "sp_them_khach_hang",
@@ -86,10 +87,19 @@ WHERE so_cccd = @so_cccd
                 new SqlParameter("@ho_ten", model.HoTen),
                 new SqlParameter("@so_dien_thoai", model.SoDienThoai),
                 new SqlParameter("@dia_chi", model.DiaChi));
+
+            var khachHangMoi = GetByCccd(model.CCCD) ?? model;
+            nhatKyService.Ghi(
+                maNhanVien,
+                "Thêm khách hàng " + BuildKhachHangSummary(khachHangMoi),
+                "khach_hang",
+                null,
+                BuildKhachHangSnapshot(khachHangMoi));
         }
 
-        public void Update(KhachHang model)
+        public void Update(KhachHang model, string maNhanVien = null)
         {
+            var khachHangCu = GetByMa(model.MaKhachHang);
             Db.ExecuteNonQuery(
                 "sp_sua_khach_hang",
                 CommandType.StoredProcedure,
@@ -97,15 +107,68 @@ WHERE so_cccd = @so_cccd
                 new SqlParameter("@ho_ten", model.HoTen),
                 new SqlParameter("@so_dien_thoai", model.SoDienThoai),
                 new SqlParameter("@dia_chi", model.DiaChi));
+
+            var khachHangMoi = GetByMa(model.MaKhachHang) ?? model;
+            nhatKyService.Ghi(
+                maNhanVien,
+                "Cập nhật khách hàng " + BuildKhachHangSummary(khachHangMoi),
+                "khach_hang",
+                BuildKhachHangSnapshot(khachHangCu),
+                BuildKhachHangSnapshot(khachHangMoi));
         }
 
-        public void CapNhatTrangThai(string maKhachHang, bool kichHoat)
+        public void CapNhatTrangThai(string maKhachHang, bool kichHoat, string maNhanVien = null)
         {
+            var khachHangCu = GetByMa(maKhachHang);
             Db.ExecuteNonQuery(
                 "sp_cap_nhat_trang_thai_khach_hang",
                 CommandType.StoredProcedure,
                 new SqlParameter("@ma_khach_hang", maKhachHang),
                 new SqlParameter("@trang_thai", kichHoat ? "Active" : "Unactive"));
+
+            var khachHangMoi = GetByMa(maKhachHang) ?? khachHangCu;
+            nhatKyService.Ghi(
+                maNhanVien,
+                "Cập nhật trạng thái khách hàng " + BuildKhachHangSummary(khachHangMoi) + " sang " + (kichHoat ? "Active" : "Unactive"),
+                "khach_hang",
+                BuildKhachHangSnapshot(khachHangCu),
+                BuildKhachHangSnapshot(khachHangMoi));
+        }
+
+        private KhachHang GetByMa(string maKhachHang)
+        {
+            if (string.IsNullOrWhiteSpace(maKhachHang))
+            {
+                return null;
+            }
+
+            var table = Db.ExecuteDataTable(
+                @"SELECT TOP 1 ma_khach_hang, so_cccd, ho_ten, so_dien_thoai, dia_chi,
+                         ISNULL(trang_thai, 'Active') AS trang_thai
+                  FROM khach_hang
+                  WHERE ma_khach_hang = @maKhachHang",
+                CommandType.Text,
+                new SqlParameter("@maKhachHang", maKhachHang));
+
+            return table.Rows.Count == 0 ? null : Map(table.Rows[0]);
+        }
+
+        private KhachHang GetByCccd(string cccd)
+        {
+            if (string.IsNullOrWhiteSpace(cccd))
+            {
+                return null;
+            }
+
+            var table = Db.ExecuteDataTable(
+                @"SELECT TOP 1 ma_khach_hang, so_cccd, ho_ten, so_dien_thoai, dia_chi,
+                         ISNULL(trang_thai, 'Active') AS trang_thai
+                  FROM khach_hang
+                  WHERE so_cccd = @cccd",
+                CommandType.Text,
+                new SqlParameter("@cccd", cccd));
+
+            return table.Rows.Count == 0 ? null : Map(table.Rows[0]);
         }
 
         private static KhachHang Map(DataRow row)
@@ -119,6 +182,33 @@ WHERE so_cccd = @so_cccd
                 DiaChi = row["dia_chi"].ToString(),
                 TrangThai = row.Table.Columns.Contains("trang_thai") ? row["trang_thai"].ToString() : "Active"
             };
+        }
+
+        private static string BuildKhachHangSummary(KhachHang model)
+        {
+            if (model == null)
+            {
+                return "không xác định";
+            }
+
+            return string.Format("{0} - {1}", model.MaKhachHang, model.HoTen);
+        }
+
+        private static string BuildKhachHangSnapshot(KhachHang model)
+        {
+            if (model == null)
+            {
+                return string.Empty;
+            }
+
+            return string.Format(
+                "Mã KH: {0}; Họ tên: {1}; CCCD: {2}; SĐT: {3}; Địa chỉ: {4}; Trạng thái: {5}",
+                model.MaKhachHang,
+                model.HoTen,
+                model.CCCD,
+                model.SoDienThoai,
+                model.DiaChi,
+                model.TrangThaiHienThi);
         }
 
         private static void EnsureTrangThaiColumn()

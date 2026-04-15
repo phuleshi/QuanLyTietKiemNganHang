@@ -152,7 +152,7 @@ namespace QuanLyTietKiemNganHang.Forms
 
                 try
                 {
-                    service.SuaSo(selected.MaSo, editForm.SoDuSauKhiSua, editForm.TrangThaiSauKhiSua);
+                    service.SuaSo(selected.MaSo, editForm.SoDuSauKhiSua, editForm.TrangThaiSauKhiSua, currentUser != null ? currentUser.MaNhanVien : null);
                     MessageBox.Show("Cập nhật sổ tiết kiệm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadData();
                 }
@@ -183,7 +183,7 @@ namespace QuanLyTietKiemNganHang.Forms
 
             try
             {
-                service.XoaSo(selected.MaSo);
+                service.XoaSo(selected.MaSo, currentUser != null ? currentUser.MaNhanVien : null);
                 selectedMaSo = string.Empty;
                 MessageBox.Show("Xóa sổ tiết kiệm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadData();

@@ -243,12 +243,12 @@ namespace QuanLyTietKiemNganHang.Forms
                 }
 
                 model.MaNhanVien = selectedMaNhanVien;
-                service.Update(model);
+                service.Update(model, currentUser != null ? currentUser.MaNhanVien : null);
                 MessageBox.Show("Cập nhật nhân viên thành công.");
             }
             else
             {
-                service.Add(model);
+                service.Add(model, currentUser != null ? currentUser.MaNhanVien : null);
                 MessageBox.Show("Thêm nhân viên thành công.");
             }
 
@@ -269,7 +269,7 @@ namespace QuanLyTietKiemNganHang.Forms
                 return;
             }
 
-            service.Delete(selectedMaNhanVien);
+            service.Delete(selectedMaNhanVien, currentUser != null ? currentUser.MaNhanVien : null);
             LoadData();
             ResetForm();
             MessageBox.Show("Xóa nhân viên thành công.");

@@ -9,7 +9,6 @@ namespace QuanLyTietKiemNganHang.Services
 {
     public class XuLyGiaoDich
     {
-        private const decimal LaiSuatKhongKyHan = 0.5m;
         private readonly XuLySoTietKiem soTietKiemService = new XuLySoTietKiem();
 
         public List<GiaoDich> GetDanhSach(DateTime? tuNgay, DateTime? denNgay, string loaiGiaoDich)
@@ -52,6 +51,18 @@ namespace QuanLyTietKiemNganHang.Services
                 .ToList();
         }
 
+        public List<SoTietKiemDanhSachItem> GetDanhSachSoDangMoTheoKhachHang(string maKhachHang)
+        {
+            if (string.IsNullOrWhiteSpace(maKhachHang))
+            {
+                return new List<SoTietKiemDanhSachItem>();
+            }
+
+            return soTietKiemService.GetDanhSachTheoKhachHang(maKhachHang)
+                .Where(x => !string.Equals(x.TrangThai, "Da_tat_toan", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+
         public KetQuaTatToan TinhTatToan(string maSo, decimal? soTienRut, bool tatToanToanBo)
         {
             var so = soTietKiemService.GetByMaSo(maSo);
@@ -65,30 +76,46 @@ namespace QuanLyTietKiemNganHang.Services
                 throw new InvalidOperationException("Sổ đã tất toán.");
             }
 
-            var gocRut = tatToanToanBo ? so.SoDuHienTai : soTienRut.GetValueOrDefault();
+            var gocRut = tatToanToanBo ? so.SoDuGocConLai : soTienRut.GetValueOrDefault();
             if (gocRut <= 0)
             {
                 throw new InvalidOperationException("Số tiền rút phải lớn hơn 0.");
             }
 
-            if (!tatToanToanBo && gocRut >= so.SoDuHienTai)
+            if (!tatToanToanBo && gocRut >= so.SoDuGocConLai)
             {
                 throw new InvalidOperationException("Rút gốc từng phần phải nhỏ hơn số dư hiện tại.");
             }
 
+            var ngayTinh = DateTime.Today;
+            var soDuGocConLai = so.SoDuGocConLai - gocRut;
+            var tongLaiTheoGocBanDau = XuLySoTietKiem.TinhLaiTamTinhChuaLamTron(
+                so.SoTienGui,
+                so.LaiSuatApDung,
+                so.NgayMo,
+                so.NgayDaoHan,
+                so.TrangThai,
+                ngayTinh);
+            var tongLaiChoPhanGocConLai = so.SoTienGui <= 0
+                ? 0
+                : tongLaiTheoGocBanDau * so.SoDuGocConLai / so.SoTienGui;
+            var lai = so.SoDuGocConLai <= 0
+                ? 0
+                : tongLaiChoPhanGocConLai * gocRut / so.SoDuGocConLai;
+            var laiConLai = tatToanToanBo
+                ? 0
+                : Math.Max(0, tongLaiChoPhanGocConLai - lai);
             var denHan = so.NgayDaoHan.HasValue && DateTime.Today >= so.NgayDaoHan.Value.Date;
-            var laiSuat = denHan ? so.LaiSuatApDung : LaiSuatKhongKyHan;
-            var soNgay = Math.Max(0, (DateTime.Today - so.NgayMo.Date).Days);
-            var lai = Math.Round(gocRut * laiSuat / 100m * soNgay / 365m, 0);
 
             return new KetQuaTatToan
             {
                 MaSo = so.MaSo,
                 GocRut = gocRut,
-                LaiTinhDuoc = lai,
-                TongNhan = gocRut + lai,
-                SoDuConLai = so.SoDuHienTai - gocRut,
-                ThongBao = denHan ? "Tất toán đúng hạn - áp dụng lãi suất kỳ hạn." : "Tất toán/rút trước hạn - áp dụng lãi suất không kỳ hạn."
+                LaiTinhDuoc = Math.Round(lai, 0),
+                TongNhan = Math.Round(gocRut + lai, 0),
+                SoDuConLai = Math.Round(soDuGocConLai + laiConLai, 0),
+                ThongBao = (denHan ? "Tất toán đúng hạn - áp dụng lãi suất kỳ hạn." : "Tất toán/rút trước hạn - áp dụng lãi suất không kỳ hạn.")
+                    + " Lãi được phân bổ theo số tiền gốc ban đầu đến ngày giao dịch."
             };
         }
 
@@ -105,11 +132,37 @@ namespace QuanLyTietKiemNganHang.Services
         public List<LichSuHoatDongItem> GetLichSuHoatDong()
         {
             var table = Db.ExecuteDataTable(
-                @"SELECT TOP 500 ma_nhat_ky, N'Nhật ký hệ thống' AS loai, ma_nhan_vien, hanh_dong, thoi_gian
-                  FROM nhat_ky_he_thong
-                  UNION ALL
-                  SELECT TOP 500 ma_gd, N'Giao dịch', ma_nv, loai_gd, ngay_gd
-                  FROM giao_dich",
+                @"SELECT TOP 1000 su_kien.ma_su_kien,
+                                   su_kien.loai_su_kien,
+                                   su_kien.nguoi_thuc_hien,
+                                   su_kien.noi_dung,
+                                   su_kien.thoi_gian
+                  FROM
+                  (
+                      SELECT nk.ma_nhat_ky AS ma_su_kien,
+                             N'Nhật ký hệ thống' AS loai_su_kien,
+                             ISNULL(nv.ten_nhan_vien + N' (' + nk.ma_nhan_vien + N')', nk.ma_nhan_vien) AS nguoi_thuc_hien,
+                             nk.hanh_dong AS noi_dung,
+                             nk.thoi_gian
+                      FROM nhat_ky_he_thong nk
+                      LEFT JOIN nhan_vien nv ON nk.ma_nhan_vien = nv.ma_nv
+
+                      UNION ALL
+
+                      SELECT gd.ma_gd AS ma_su_kien,
+                             N'Giao dịch tiền' AS loai_su_kien,
+                             ISNULL(nv.ten_nhan_vien + N' (' + gd.ma_nv + N')', gd.ma_nv) AS nguoi_thuc_hien,
+                             CASE
+                                 WHEN gd.loai_gd = N'Rut_tien' THEN N'Giao dịch rút tiền sổ ' + gd.ma_so + N' - ' + CONVERT(NVARCHAR(50), CAST(gd.so_tien AS DECIMAL(18,0))) + N' VND'
+                                 WHEN gd.loai_gd = N'Gui_them' THEN N'Giao dịch gửi thêm sổ ' + gd.ma_so + N' - ' + CONVERT(NVARCHAR(50), CAST(gd.so_tien AS DECIMAL(18,0))) + N' VND'
+                                 WHEN gd.loai_gd = N'Tra_lai' THEN N'Giao dịch trả lãi sổ ' + gd.ma_so + N' - ' + CONVERT(NVARCHAR(50), CAST(gd.so_tien AS DECIMAL(18,0))) + N' VND'
+                                 ELSE gd.loai_gd
+                             END AS noi_dung,
+                             gd.ngay_gd AS thoi_gian
+                      FROM giao_dich gd
+                      LEFT JOIN nhan_vien nv ON gd.ma_nv = nv.ma_nv
+                  ) su_kien
+                  ORDER BY su_kien.thoi_gian DESC, su_kien.ma_su_kien DESC",
                 CommandType.Text);
 
             return table.AsEnumerable()

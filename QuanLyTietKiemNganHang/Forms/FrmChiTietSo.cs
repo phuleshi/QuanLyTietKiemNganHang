@@ -55,11 +55,16 @@ namespace QuanLyTietKiemNganHang.Forms
             StyleReadOnlyTextBox(txtNgayDaoHan);
             StyleReadOnlyTextBox(txtNhanVienMo);
 
+            lblSoDuConLai.Font = new Font("Segoe UI Semibold", 10, FontStyle.Bold);
+            lblSoDuConLai.ForeColor = ControlFactory.TextColor;
+
             numSoDu.Font = new Font("Segoe UI", 11);
             numSoDu.BorderStyle = BorderStyle.FixedSingle;
-            numSoDu.Maximum = 1000000000;
-            numSoDu.Minimum = 0;
+            numSoDu.DecimalPlaces = 2;
+            numSoDu.Maximum = decimal.MaxValue;
+            numSoDu.Minimum = decimal.Zero;
             numSoDu.ThousandsSeparator = true;
+            numSoDu.TextAlign = HorizontalAlignment.Right;
 
             cboTrangThai.Font = new Font("Segoe UI", 11);
             cboTrangThai.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -82,7 +87,9 @@ namespace QuanLyTietKiemNganHang.Forms
             }
 
             lblTitle.Text = allowEdit ? "Sửa sổ tiết kiệm" : "Chi tiết sổ tiết kiệm";
-            lblSubTitle.Text = "Thông tin sổ " + item.MaSo;
+            lblSubTitle.Text = allowEdit
+                ? "Thông tin sổ " + item.MaSo
+                : "Thông tin sổ " + item.MaSo + " - lãi tạm tính đến ngày " + DateTime.Today.ToString("dd/MM/yyyy");
 
             txtMaSo.Text = "Mã sổ" + Environment.NewLine + item.MaSo;
             txtChuSoHuu.Text = "Chủ sở hữu" + Environment.NewLine + item.ChuSoHuu + " (" + item.MaKhachHang + ")";
@@ -97,9 +104,12 @@ namespace QuanLyTietKiemNganHang.Forms
             {
                 nhanVienMo += " - " + item.TenNhanVienMo;
             }
-            txtNhanVienMo.Text = "Nhân viên mở sổ" + Environment.NewLine + nhanVienMo;
 
-            numSoDu.Value = item.SoDuHienTai;
+            txtNhanVienMo.Text = "Nhân viên mở sổ" + Environment.NewLine + nhanVienMo;
+            lblSoDuConLai.Text = allowEdit
+                ? "Số dư gốc còn lại"
+                : "Số dư còn lại (gồm lãi tạm tính)";
+            SetNumericValue(numSoDu, allowEdit ? item.SoDuGocConLai : item.SoDuHienTai);
 
             cboTrangThai.DisplayMember = "Text";
             cboTrangThai.ValueMember = "Value";
@@ -139,6 +149,21 @@ namespace QuanLyTietKiemNganHang.Forms
 
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private static void SetNumericValue(NumericUpDown numericUpDown, decimal value)
+        {
+            if (value < numericUpDown.Minimum)
+            {
+                numericUpDown.Minimum = value;
+            }
+
+            if (value > numericUpDown.Maximum)
+            {
+                numericUpDown.Maximum = value;
+            }
+
+            numericUpDown.Value = value;
         }
 
         private static void StyleReadOnlyTextBox(TextBox textBox)

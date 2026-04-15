@@ -134,7 +134,7 @@ namespace QuanLyTietKiemNganHang.Forms
         {
             try
             {
-                service.Them(txtTenGoi.Text, numLaiSuat.Value, (int)numKyHan.Value);
+                service.Them(txtTenGoi.Text, numLaiSuat.Value, (int)numKyHan.Value, currentUser != null ? currentUser.MaNhanVien : null);
                 MessageBox.Show("Thêm gói tiết kiệm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadData();
             }
@@ -154,7 +154,7 @@ namespace QuanLyTietKiemNganHang.Forms
 
             try
             {
-                service.Sua(selectedMaGoi, txtTenGoi.Text, numLaiSuat.Value, (int)numKyHan.Value);
+                service.Sua(selectedMaGoi, txtTenGoi.Text, numLaiSuat.Value, (int)numKyHan.Value, currentUser != null ? currentUser.MaNhanVien : null);
                 MessageBox.Show("Cập nhật gói tiết kiệm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadData();
             }
@@ -179,7 +179,7 @@ namespace QuanLyTietKiemNganHang.Forms
 
             try
             {
-                service.Xoa(selectedMaGoi);
+                service.Xoa(selectedMaGoi, currentUser != null ? currentUser.MaNhanVien : null);
                 selectedMaGoi = string.Empty;
                 lblSelected.Text = "Chưa chọn gói.";
                 MessageBox.Show("Xóa gói tiết kiệm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);

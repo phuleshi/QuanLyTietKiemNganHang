@@ -7,6 +7,8 @@ namespace QuanLyTietKiemNganHang.Services
 {
     public class AuthService
     {
+        private readonly NhatKyHeThongService nhatKyService = new NhatKyHeThongService();
+
         public NhanVien Login(string username, string password)
         {
             var table = Db.ExecuteDataTable(
@@ -23,7 +25,7 @@ namespace QuanLyTietKiemNganHang.Services
             }
 
             var row = table.Rows[0];
-            return new NhanVien
+            var nhanVien = new NhanVien
             {
                 MaNhanVien = row["ma_nv"].ToString(),
                 TenNhanVien = row["ten_nhan_vien"].ToString(),
@@ -31,6 +33,15 @@ namespace QuanLyTietKiemNganHang.Services
                 MatKhau = row["mat_khau"].ToString(),
                 VaiTro = RoleHelper.NormalizeRole(row["vai_tro"].ToString())
             };
+
+            nhatKyService.Ghi(
+                nhanVien.MaNhanVien,
+                "Đăng nhập hệ thống",
+                "nhan_vien",
+                null,
+                "Tài khoản: " + nhanVien.TaiKhoan + "; Vai trò: " + nhanVien.VaiTroHienThi);
+
+            return nhanVien;
         }
     }
 }

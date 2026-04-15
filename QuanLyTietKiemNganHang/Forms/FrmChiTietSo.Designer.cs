@@ -16,6 +16,8 @@ namespace QuanLyTietKiemNganHang.Forms
         private System.Windows.Forms.TextBox txtNgayMo;
         private System.Windows.Forms.TextBox txtNgayDaoHan;
         private System.Windows.Forms.TextBox txtNhanVienMo;
+        private System.Windows.Forms.Panel pnlSoDuConLai;
+        private System.Windows.Forms.Label lblSoDuConLai;
         private System.Windows.Forms.NumericUpDown numSoDu;
         private System.Windows.Forms.ComboBox cboTrangThai;
         private System.Windows.Forms.Panel bottomPanel;
@@ -46,7 +48,9 @@ namespace QuanLyTietKiemNganHang.Forms
             this.txtNgayMo = new System.Windows.Forms.TextBox();
             this.txtNgayDaoHan = new System.Windows.Forms.TextBox();
             this.txtNhanVienMo = new System.Windows.Forms.TextBox();
+            this.pnlSoDuConLai = new System.Windows.Forms.Panel();
             this.numSoDu = new System.Windows.Forms.NumericUpDown();
+            this.lblSoDuConLai = new System.Windows.Forms.Label();
             this.cboTrangThai = new System.Windows.Forms.ComboBox();
             this.bottomPanel = new System.Windows.Forms.Panel();
             this.btnDong = new System.Windows.Forms.Button();
@@ -54,6 +58,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.topPanel.SuspendLayout();
             this.contentCard.SuspendLayout();
             this.detailsTable.SuspendLayout();
+            this.pnlSoDuConLai.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSoDu)).BeginInit();
             this.bottomPanel.SuspendLayout();
             this.SuspendLayout();
@@ -64,7 +69,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.topPanel.Controls.Add(this.lblTitle);
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
-            this.topPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.topPanel.Margin = new System.Windows.Forms.Padding(4);
             this.topPanel.Name = "topPanel";
             this.topPanel.Padding = new System.Windows.Forms.Padding(32, 22, 32, 22);
             this.topPanel.Size = new System.Drawing.Size(1200, 113);
@@ -96,7 +101,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.contentCard.Controls.Add(this.bottomPanel);
             this.contentCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentCard.Location = new System.Drawing.Point(0, 113);
-            this.contentCard.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.contentCard.Margin = new System.Windows.Forms.Padding(4);
             this.contentCard.Name = "contentCard";
             this.contentCard.Padding = new System.Windows.Forms.Padding(32, 30, 32, 30);
             this.contentCard.Size = new System.Drawing.Size(1200, 650);
@@ -115,11 +120,11 @@ namespace QuanLyTietKiemNganHang.Forms
             this.detailsTable.Controls.Add(this.txtNgayMo, 1, 2);
             this.detailsTable.Controls.Add(this.txtNgayDaoHan, 0, 3);
             this.detailsTable.Controls.Add(this.txtNhanVienMo, 1, 3);
-            this.detailsTable.Controls.Add(this.numSoDu, 0, 4);
+            this.detailsTable.Controls.Add(this.pnlSoDuConLai, 0, 4);
             this.detailsTable.Controls.Add(this.cboTrangThai, 1, 4);
             this.detailsTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.detailsTable.Location = new System.Drawing.Point(32, 30);
-            this.detailsTable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.detailsTable.Margin = new System.Windows.Forms.Padding(4);
             this.detailsTable.Name = "detailsTable";
             this.detailsTable.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.detailsTable.RowCount = 5;
@@ -135,7 +140,7 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.txtMaSo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtMaSo.Location = new System.Drawing.Point(4, 14);
-            this.txtMaSo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMaSo.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaSo.Multiline = true;
             this.txtMaSo.Name = "txtMaSo";
             this.txtMaSo.Size = new System.Drawing.Size(560, 93);
@@ -145,7 +150,7 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.txtChuSoHuu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtChuSoHuu.Location = new System.Drawing.Point(572, 14);
-            this.txtChuSoHuu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtChuSoHuu.Margin = new System.Windows.Forms.Padding(4);
             this.txtChuSoHuu.Multiline = true;
             this.txtChuSoHuu.Name = "txtChuSoHuu";
             this.txtChuSoHuu.Size = new System.Drawing.Size(560, 93);
@@ -155,7 +160,7 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.txtGoiTietKiem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtGoiTietKiem.Location = new System.Drawing.Point(4, 115);
-            this.txtGoiTietKiem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtGoiTietKiem.Margin = new System.Windows.Forms.Padding(4);
             this.txtGoiTietKiem.Multiline = true;
             this.txtGoiTietKiem.Name = "txtGoiTietKiem";
             this.txtGoiTietKiem.Size = new System.Drawing.Size(560, 93);
@@ -165,7 +170,7 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.txtSoTienGui.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSoTienGui.Location = new System.Drawing.Point(572, 115);
-            this.txtSoTienGui.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSoTienGui.Margin = new System.Windows.Forms.Padding(4);
             this.txtSoTienGui.Multiline = true;
             this.txtSoTienGui.Name = "txtSoTienGui";
             this.txtSoTienGui.Size = new System.Drawing.Size(560, 93);
@@ -175,7 +180,7 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.txtLaiSuat.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtLaiSuat.Location = new System.Drawing.Point(4, 216);
-            this.txtLaiSuat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtLaiSuat.Margin = new System.Windows.Forms.Padding(4);
             this.txtLaiSuat.Multiline = true;
             this.txtLaiSuat.Name = "txtLaiSuat";
             this.txtLaiSuat.Size = new System.Drawing.Size(560, 93);
@@ -185,7 +190,7 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.txtNgayMo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNgayMo.Location = new System.Drawing.Point(572, 216);
-            this.txtNgayMo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtNgayMo.Margin = new System.Windows.Forms.Padding(4);
             this.txtNgayMo.Multiline = true;
             this.txtNgayMo.Name = "txtNgayMo";
             this.txtNgayMo.Size = new System.Drawing.Size(560, 93);
@@ -195,7 +200,7 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.txtNgayDaoHan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNgayDaoHan.Location = new System.Drawing.Point(4, 317);
-            this.txtNgayDaoHan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtNgayDaoHan.Margin = new System.Windows.Forms.Padding(4);
             this.txtNgayDaoHan.Multiline = true;
             this.txtNgayDaoHan.Name = "txtNgayDaoHan";
             this.txtNgayDaoHan.Size = new System.Drawing.Size(560, 93);
@@ -205,27 +210,49 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.txtNhanVienMo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNhanVienMo.Location = new System.Drawing.Point(572, 317);
-            this.txtNhanVienMo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtNhanVienMo.Margin = new System.Windows.Forms.Padding(4);
             this.txtNhanVienMo.Multiline = true;
             this.txtNhanVienMo.Name = "txtNhanVienMo";
             this.txtNhanVienMo.Size = new System.Drawing.Size(560, 93);
             this.txtNhanVienMo.TabIndex = 7;
             // 
+            // pnlSoDuConLai
+            // 
+            this.pnlSoDuConLai.Controls.Add(this.numSoDu);
+            this.pnlSoDuConLai.Controls.Add(this.lblSoDuConLai);
+            this.pnlSoDuConLai.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlSoDuConLai.Location = new System.Drawing.Point(4, 418);
+            this.pnlSoDuConLai.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlSoDuConLai.Name = "pnlSoDuConLai";
+            this.pnlSoDuConLai.Size = new System.Drawing.Size(560, 93);
+            this.pnlSoDuConLai.TabIndex = 8;
+            // 
             // numSoDu
             // 
-            this.numSoDu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numSoDu.Location = new System.Drawing.Point(4, 418);
-            this.numSoDu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numSoDu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.numSoDu.Location = new System.Drawing.Point(0, 32);
+            this.numSoDu.Margin = new System.Windows.Forms.Padding(4, 12, 4, 4);
             this.numSoDu.Name = "numSoDu";
             this.numSoDu.Size = new System.Drawing.Size(560, 22);
-            this.numSoDu.TabIndex = 8;
+            this.numSoDu.TabIndex = 1;
+            // 
+            // lblSoDuConLai
+            // 
+            this.lblSoDuConLai.AutoSize = true;
+            this.lblSoDuConLai.Location = new System.Drawing.Point(0, 0);
+            this.lblSoDuConLai.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSoDuConLai.Name = "lblSoDuConLai";
+            this.lblSoDuConLai.Size = new System.Drawing.Size(84, 16);
+            this.lblSoDuConLai.TabIndex = 0;
+            this.lblSoDuConLai.Text = "Số dư còn lại";
             // 
             // cboTrangThai
             // 
             this.cboTrangThai.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboTrangThai.FormattingEnabled = true;
             this.cboTrangThai.Location = new System.Drawing.Point(572, 418);
-            this.cboTrangThai.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboTrangThai.Margin = new System.Windows.Forms.Padding(4);
             this.cboTrangThai.Name = "cboTrangThai";
             this.cboTrangThai.Size = new System.Drawing.Size(560, 24);
             this.cboTrangThai.TabIndex = 9;
@@ -236,7 +263,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.bottomPanel.Controls.Add(this.btnLuu);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.bottomPanel.Location = new System.Drawing.Point(32, 541);
-            this.bottomPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.bottomPanel.Margin = new System.Windows.Forms.Padding(4);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(1136, 79);
             this.bottomPanel.TabIndex = 1;
@@ -246,7 +273,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.btnDong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDong.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnDong.Location = new System.Drawing.Point(957, 15);
-            this.btnDong.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDong.Margin = new System.Windows.Forms.Padding(4);
             this.btnDong.Name = "btnDong";
             this.btnDong.Size = new System.Drawing.Size(160, 49);
             this.btnDong.TabIndex = 1;
@@ -257,7 +284,7 @@ namespace QuanLyTietKiemNganHang.Forms
             // 
             this.btnLuu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLuu.Location = new System.Drawing.Point(776, 15);
-            this.btnLuu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLuu.Margin = new System.Windows.Forms.Padding(4);
             this.btnLuu.Name = "btnLuu";
             this.btnLuu.Size = new System.Drawing.Size(160, 49);
             this.btnLuu.TabIndex = 0;
@@ -274,7 +301,7 @@ namespace QuanLyTietKiemNganHang.Forms
             this.ClientSize = new System.Drawing.Size(1200, 763);
             this.Controls.Add(this.contentCard);
             this.Controls.Add(this.topPanel);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1167, 752);
             this.Name = "FrmChiTietSo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -284,6 +311,8 @@ namespace QuanLyTietKiemNganHang.Forms
             this.contentCard.ResumeLayout(false);
             this.detailsTable.ResumeLayout(false);
             this.detailsTable.PerformLayout();
+            this.pnlSoDuConLai.ResumeLayout(false);
+            this.pnlSoDuConLai.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSoDu)).EndInit();
             this.bottomPanel.ResumeLayout(false);
             this.ResumeLayout(false);

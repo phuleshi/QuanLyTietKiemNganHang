@@ -78,7 +78,8 @@ namespace QuanLyTietKiemNganHang.Forms
         {
             foreach (Control control in menuButtonsPanel.Controls)
             {
-                if (control is Button button)
+                var button = control as Button;
+                if (button != null)
                 {
                     button.Width = 188;
                     button.Margin = new Padding(0, 0, 0, 10);

@@ -7,6 +7,16 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Panel contentWrap;
         private System.Windows.Forms.Panel contentCard;
+        private System.Windows.Forms.Panel pnlHoTenKhachHang;
+        private System.Windows.Forms.TextBox txtHoTenKhachHang;
+        private System.Windows.Forms.Label lblHoTenKhachHang;
+        private System.Windows.Forms.Panel pnlCccdKhachHang;
+        private System.Windows.Forms.TextBox txtCccdKhachHang;
+        private System.Windows.Forms.Label lblCccdKhachHang;
+        private System.Windows.Forms.Panel pnlMaKhachHang;
+        private System.Windows.Forms.TextBox txtMaKhachHang;
+        private System.Windows.Forms.Label lblMaKhachHang;
+        private System.Windows.Forms.Button btnXacDinhKhachHang;
         private System.Windows.Forms.Panel pnlSo;
         private System.Windows.Forms.Label lblSo;
         private System.Windows.Forms.ComboBox cboSo;
@@ -44,6 +54,16 @@
             this.lblRut = new System.Windows.Forms.Label();
             this.rdRutGoc = new System.Windows.Forms.RadioButton();
             this.rdTatToanToanBo = new System.Windows.Forms.RadioButton();
+            this.btnXacDinhKhachHang = new System.Windows.Forms.Button();
+            this.pnlMaKhachHang = new System.Windows.Forms.Panel();
+            this.txtMaKhachHang = new System.Windows.Forms.TextBox();
+            this.lblMaKhachHang = new System.Windows.Forms.Label();
+            this.pnlCccdKhachHang = new System.Windows.Forms.Panel();
+            this.txtCccdKhachHang = new System.Windows.Forms.TextBox();
+            this.lblCccdKhachHang = new System.Windows.Forms.Label();
+            this.pnlHoTenKhachHang = new System.Windows.Forms.Panel();
+            this.txtHoTenKhachHang = new System.Windows.Forms.TextBox();
+            this.lblHoTenKhachHang = new System.Windows.Forms.Label();
             this.pnlSo = new System.Windows.Forms.Panel();
             this.cboSo = new System.Windows.Forms.ComboBox();
             this.lblSo = new System.Windows.Forms.Label();
@@ -52,6 +72,9 @@
             this.contentCard.SuspendLayout();
             this.pnlRut.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRut)).BeginInit();
+            this.pnlMaKhachHang.SuspendLayout();
+            this.pnlCccdKhachHang.SuspendLayout();
+            this.pnlHoTenKhachHang.SuspendLayout();
             this.pnlSo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,6 +116,10 @@
             this.contentCard.Controls.Add(this.pnlRut);
             this.contentCard.Controls.Add(this.rdRutGoc);
             this.contentCard.Controls.Add(this.rdTatToanToanBo);
+            this.contentCard.Controls.Add(this.btnXacDinhKhachHang);
+            this.contentCard.Controls.Add(this.pnlMaKhachHang);
+            this.contentCard.Controls.Add(this.pnlCccdKhachHang);
+            this.contentCard.Controls.Add(this.pnlHoTenKhachHang);
             this.contentCard.Controls.Add(this.pnlSo);
             this.contentCard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentCard.Location = new System.Drawing.Point(24, 24);
@@ -114,11 +141,12 @@
             this.lblThongTin.Name = "lblThongTin";
             this.lblThongTin.Size = new System.Drawing.Size(510, 270);
             this.lblThongTin.TabIndex = 6;
-            this.lblThongTin.Text = "Chọn sổ và nhấn Tính để xem số tiền nhận.";
+            this.lblThongTin.Text = "Nhập họ tên và CCCD khách hàng, sau đó bấm Xác định khách hàng để tải danh sách s" +
+    "ổ tiết kiệm.";
             // 
             // btnXacNhan
             // 
-            this.btnXacNhan.Location = new System.Drawing.Point(150, 320);
+            this.btnXacNhan.Location = new System.Drawing.Point(150, 510);
             this.btnXacNhan.Name = "btnXacNhan";
             this.btnXacNhan.Size = new System.Drawing.Size(120, 40);
             this.btnXacNhan.TabIndex = 5;
@@ -127,7 +155,7 @@
             // 
             // btnTinh
             // 
-            this.btnTinh.Location = new System.Drawing.Point(18, 320);
+            this.btnTinh.Location = new System.Drawing.Point(18, 510);
             this.btnTinh.Name = "btnTinh";
             this.btnTinh.Size = new System.Drawing.Size(120, 40);
             this.btnTinh.TabIndex = 4;
@@ -138,9 +166,9 @@
             // 
             this.pnlRut.Controls.Add(this.numRut);
             this.pnlRut.Controls.Add(this.lblRut);
-            this.pnlRut.Location = new System.Drawing.Point(18, 220);
+            this.pnlRut.Location = new System.Drawing.Point(18, 420);
             this.pnlRut.Name = "pnlRut";
-            this.pnlRut.Size = new System.Drawing.Size(360, 80);
+            this.pnlRut.Size = new System.Drawing.Size(360, 70);
             this.pnlRut.TabIndex = 3;
             // 
             // numRut
@@ -176,7 +204,7 @@
             // rdRutGoc
             // 
             this.rdRutGoc.AutoSize = true;
-            this.rdRutGoc.Location = new System.Drawing.Point(18, 180);
+            this.rdRutGoc.Location = new System.Drawing.Point(18, 390);
             this.rdRutGoc.Name = "rdRutGoc";
             this.rdRutGoc.Size = new System.Drawing.Size(123, 17);
             this.rdRutGoc.TabIndex = 2;
@@ -187,7 +215,7 @@
             // 
             this.rdTatToanToanBo.AutoSize = true;
             this.rdTatToanToanBo.Checked = true;
-            this.rdTatToanToanBo.Location = new System.Drawing.Point(18, 150);
+            this.rdTatToanToanBo.Location = new System.Drawing.Point(18, 360);
             this.rdTatToanToanBo.Name = "rdTatToanToanBo";
             this.rdTatToanToanBo.Size = new System.Drawing.Size(114, 17);
             this.rdTatToanToanBo.TabIndex = 1;
@@ -195,20 +223,111 @@
             this.rdTatToanToanBo.Text = "Tất toán toàn bộ";
             this.rdTatToanToanBo.UseVisualStyleBackColor = true;
             // 
+            // btnXacDinhKhachHang
+            // 
+            this.btnXacDinhKhachHang.Location = new System.Drawing.Point(245, 206);
+            this.btnXacDinhKhachHang.Name = "btnXacDinhKhachHang";
+            this.btnXacDinhKhachHang.Size = new System.Drawing.Size(133, 40);
+            this.btnXacDinhKhachHang.TabIndex = 11;
+            this.btnXacDinhKhachHang.Text = "Xác định";
+            this.btnXacDinhKhachHang.UseVisualStyleBackColor = true;
+            // 
+            // pnlMaKhachHang
+            // 
+            this.pnlMaKhachHang.Controls.Add(this.txtMaKhachHang);
+            this.pnlMaKhachHang.Controls.Add(this.lblMaKhachHang);
+            this.pnlMaKhachHang.Location = new System.Drawing.Point(18, 176);
+            this.pnlMaKhachHang.Name = "pnlMaKhachHang";
+            this.pnlMaKhachHang.Size = new System.Drawing.Size(220, 70);
+            this.pnlMaKhachHang.TabIndex = 10;
+            // 
+            // txtMaKhachHang
+            // 
+            this.txtMaKhachHang.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtMaKhachHang.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtMaKhachHang.Location = new System.Drawing.Point(0, 34);
+            this.txtMaKhachHang.Name = "txtMaKhachHang";
+            this.txtMaKhachHang.ReadOnly = true;
+            this.txtMaKhachHang.Size = new System.Drawing.Size(210, 25);
+            this.txtMaKhachHang.TabIndex = 1;
+            // 
+            // lblMaKhachHang
+            // 
+            this.lblMaKhachHang.AutoSize = true;
+            this.lblMaKhachHang.Location = new System.Drawing.Point(0, 10);
+            this.lblMaKhachHang.Name = "lblMaKhachHang";
+            this.lblMaKhachHang.Size = new System.Drawing.Size(84, 13);
+            this.lblMaKhachHang.TabIndex = 0;
+            this.lblMaKhachHang.Text = "Mã khách hàng";
+            // 
+            // pnlCccdKhachHang
+            // 
+            this.pnlCccdKhachHang.Controls.Add(this.txtCccdKhachHang);
+            this.pnlCccdKhachHang.Controls.Add(this.lblCccdKhachHang);
+            this.pnlCccdKhachHang.Location = new System.Drawing.Point(18, 100);
+            this.pnlCccdKhachHang.Name = "pnlCccdKhachHang";
+            this.pnlCccdKhachHang.Size = new System.Drawing.Size(360, 70);
+            this.pnlCccdKhachHang.TabIndex = 9;
+            // 
+            // txtCccdKhachHang
+            // 
+            this.txtCccdKhachHang.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCccdKhachHang.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtCccdKhachHang.Location = new System.Drawing.Point(0, 34);
+            this.txtCccdKhachHang.Name = "txtCccdKhachHang";
+            this.txtCccdKhachHang.Size = new System.Drawing.Size(320, 25);
+            this.txtCccdKhachHang.TabIndex = 1;
+            // 
+            // lblCccdKhachHang
+            // 
+            this.lblCccdKhachHang.AutoSize = true;
+            this.lblCccdKhachHang.Location = new System.Drawing.Point(0, 10);
+            this.lblCccdKhachHang.Name = "lblCccdKhachHang";
+            this.lblCccdKhachHang.Size = new System.Drawing.Size(39, 13);
+            this.lblCccdKhachHang.TabIndex = 0;
+            this.lblCccdKhachHang.Text = "CCCD";
+            // 
+            // pnlHoTenKhachHang
+            // 
+            this.pnlHoTenKhachHang.Controls.Add(this.txtHoTenKhachHang);
+            this.pnlHoTenKhachHang.Controls.Add(this.lblHoTenKhachHang);
+            this.pnlHoTenKhachHang.Location = new System.Drawing.Point(18, 24);
+            this.pnlHoTenKhachHang.Name = "pnlHoTenKhachHang";
+            this.pnlHoTenKhachHang.Size = new System.Drawing.Size(360, 70);
+            this.pnlHoTenKhachHang.TabIndex = 8;
+            // 
+            // txtHoTenKhachHang
+            // 
+            this.txtHoTenKhachHang.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtHoTenKhachHang.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtHoTenKhachHang.Location = new System.Drawing.Point(0, 34);
+            this.txtHoTenKhachHang.Name = "txtHoTenKhachHang";
+            this.txtHoTenKhachHang.Size = new System.Drawing.Size(320, 25);
+            this.txtHoTenKhachHang.TabIndex = 1;
+            // 
+            // lblHoTenKhachHang
+            // 
+            this.lblHoTenKhachHang.AutoSize = true;
+            this.lblHoTenKhachHang.Location = new System.Drawing.Point(0, 10);
+            this.lblHoTenKhachHang.Name = "lblHoTenKhachHang";
+            this.lblHoTenKhachHang.Size = new System.Drawing.Size(89, 13);
+            this.lblHoTenKhachHang.TabIndex = 0;
+            this.lblHoTenKhachHang.Text = "Tên khách hàng";
+            // 
             // pnlSo
             // 
             this.pnlSo.Controls.Add(this.cboSo);
             this.pnlSo.Controls.Add(this.lblSo);
-            this.pnlSo.Location = new System.Drawing.Point(18, 24);
+            this.pnlSo.Location = new System.Drawing.Point(18, 266);
             this.pnlSo.Name = "pnlSo";
-            this.pnlSo.Size = new System.Drawing.Size(360, 90);
+            this.pnlSo.Size = new System.Drawing.Size(360, 80);
             this.pnlSo.TabIndex = 0;
             // 
             // cboSo
             // 
             this.cboSo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSo.FormattingEnabled = true;
-            this.cboSo.Location = new System.Drawing.Point(0, 38);
+            this.cboSo.Location = new System.Drawing.Point(0, 34);
             this.cboSo.Name = "cboSo";
             this.cboSo.Size = new System.Drawing.Size(320, 21);
             this.cboSo.TabIndex = 1;
@@ -241,6 +360,12 @@
             this.pnlRut.ResumeLayout(false);
             this.pnlRut.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRut)).EndInit();
+            this.pnlMaKhachHang.ResumeLayout(false);
+            this.pnlMaKhachHang.PerformLayout();
+            this.pnlCccdKhachHang.ResumeLayout(false);
+            this.pnlCccdKhachHang.PerformLayout();
+            this.pnlHoTenKhachHang.ResumeLayout(false);
+            this.pnlHoTenKhachHang.PerformLayout();
             this.pnlSo.ResumeLayout(false);
             this.pnlSo.PerformLayout();
             this.ResumeLayout(false);
